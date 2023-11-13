@@ -106,7 +106,7 @@ def deletar_bicicleta(bicicleta_id):
         }
     ]
 
-    return response_mock.json()
+    return "response_mock.json()"
 
 
 def validar_id(bicicleta_id):
