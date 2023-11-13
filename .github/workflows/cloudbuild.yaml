@@ -44,6 +44,11 @@ jobs:
         pip install Flask gunicorn requests mock
         python src/tests/totem_test.py
         deactivate 
+
+    - name: Run Coverage Tests
+      run: |
+        coverage run -m unittest src/tests/bicicleta_test.py
+        coverage report -m
     
     - name: Build and Push Docker image
       run: |
