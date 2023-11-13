@@ -34,7 +34,7 @@ jobs:
         python -m venv venv
         source venv/bin/activate
         pip install Flask gunicorn requests mock
-        python tests/bicicleta_test.py
+        python src/tests/bicicleta_test.py
         deactivate
 
     - name: Run Totem Tests
