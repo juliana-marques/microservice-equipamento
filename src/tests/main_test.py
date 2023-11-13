@@ -52,7 +52,7 @@ class TestMain(unittest.TestCase):
         }
 
         with app.test_client() as client:
-            response = client.post('/bicicleta', data=2, json=data)
+            response = client.post('/bicicleta/2', json=data)
             self.assertEqual(response.status_code, mock_editar_bicicletas.status_code)
 
 
