@@ -6,10 +6,9 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
 
-from service.BicicletaController import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id
 
 from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta
-from service.TrancaService import listar_trancas
+from service.TrancaService import listar_trancas, cadastrar_tranca
 
 
 app = Flask(__name__)
@@ -22,7 +21,7 @@ def listar_bicicletas_route():
 
 @app.route('/bicicleta', methods=['POST'])
 def cadastrar_bicicleta_route():
-    data = request.form
+    data = request.get_json()
 
     marca = data.get('marca')
     modelo = data.get('modelo')
@@ -42,7 +41,7 @@ def editar_bicicleta_route(bicicleta_id):
     if verificacao != True:
         return verificacao
 
-    data = request.form
+    data = request.get_json()
 
     marca = data.get('marca')
     modelo = data.get('modelo')
@@ -60,6 +59,19 @@ def obter_trancas_route():
     trancas = listar_trancas()
     return trancas
 
+@app.route('/tranca', methods=['POST'])
+def cadastrar_trancas_route():
+    data = request.get_json()
+
+    numero = data.get('numero')
+    localizacao = data.get('localizacao')
+    anoDeFabricacao = data.get('anoDeFabricacao')
+    modelo = data.get('modelo')
+    status = data.get('status')
+
+    response = cadastrar_tranca(numero, localizacao, anoDeFabricacao, modelo, status)
+
+    return response
 
 if __name__ == '__main__':
     app.run(port=int(os.environ.get("PORT", 4000)),host='0.0.0.0',debug=True)
