@@ -90,15 +90,15 @@ def editar_tranca(data, id_tranca):
     response_mock = Mock()
     tranca = buscar_tranca_por_id(id_tranca)
     response_mock.status_code = "Dados atualizados", 200
-    idExists = validar_id(id_tranca)
+    id_exists = validar_id(id_tranca)
 
     numero = data.get('numero')
     localizacao = data.get('localizacao')
-    anoDeFabricacao = data.get('anoDeFabricacao')
+    ano_de_fabricacao = data.get('ano_de_fabricacao')
     modelo = data.get('modelo')
     status = data.get('status')
 
-    if idExists == False:
+    if id_exists == False:
         response_mock.status_code = 404
         response_mock.json.return_value = [
             {
@@ -110,7 +110,7 @@ def editar_tranca(data, id_tranca):
     
     tranca['numero'] = numero
     tranca['localizacao'] = localizacao
-    tranca['anoDeFabricacao'] = anoDeFabricacao
+    tranca['ano_de_fabricacao'] = ano_de_fabricacao
     tranca['modelo'] = modelo
     tranca['status'] = status
     

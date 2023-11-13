@@ -1,5 +1,5 @@
 import logging, mock, unittest
-from unittest.mock import Mock, MagicMock
+from unittest.mock import Mock
 
 requests = Mock()
 

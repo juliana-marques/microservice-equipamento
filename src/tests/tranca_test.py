@@ -9,6 +9,9 @@ from your_module import (
     validar_id
 )
 
+modelo_a = "Modelo A"
+disponivel = "DISPONIVEL"
+
 class TestAppFunctions(unittest.TestCase):
 
     @patch('your_module.Mock')
@@ -21,8 +24,8 @@ class TestAppFunctions(unittest.TestCase):
                 "numero": 1,
                 "localizacao": "Botafogo",
                 "ano_de_fabricacao": "2022",
-                "modelo": "Modelo A",
-                "status": "Disponível"
+                "modelo": modelo_a,
+                "status": disponivel
             },
             {
                 "id": 2,
@@ -46,8 +49,8 @@ class TestAppFunctions(unittest.TestCase):
         numero = 1
         localizacao = "Botafogo"
         ano_de_fabricacao = "2022"
-        modelo = "Modelo A"
-        status = "Disponível"
+        modelo = modelo_a
+        status = disponivel
 
         mock_response.status_code = 200
         mock_response.json.return_value = {
@@ -76,8 +79,8 @@ class TestAppFunctions(unittest.TestCase):
             "numero": id_tranca,
             "localizacao": "Botafogo",
             "ano_de_fabricacao": "2022",
-            "modelo": "Modelo A",
-            "status": "Disponível"
+            "modelo": modelo_a,
+            "status": disponivel
         }
 
         with patch('your_module.buscar_tranca_por_id', return_value=mock_response.json()):
@@ -95,8 +98,8 @@ class TestAppFunctions(unittest.TestCase):
         data = {
             "numero": 1,
             "localizacao": "Copacabana",
-            "anoDeFabricacao": "2022",
-            "modelo": "Modelo A",
+            "ano_de_fabricacao": "2022",
+            "modelo": modelo_a,
             "status": "Ocupada"
         }
 
