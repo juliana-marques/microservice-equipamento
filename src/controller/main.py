@@ -13,6 +13,7 @@ from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranc
 
 app = Flask(__name__)
 csrf = CSRFProtect(app)
+csrf.init_app(app)
 
 requests = Mock()
 
