@@ -48,7 +48,7 @@ def editar_bicicleta_route(bicicleta_id):
     if verificacao != True:
         return verificacao
 
-    data = request.form
+    data = request.json
 
     marca = data.get('marca')
     modelo = data.get('modelo')
@@ -73,7 +73,7 @@ def listar_totens_route():
 
 @app.route('/totem', methods=['POST'])
 def cadastrar_totem_route():
-    data = request.form
+    data = request.json
 
     localizacao = data.get('localizacao')
     descricao = data.get('descricao')
@@ -90,7 +90,7 @@ def editar_totem_route(id_totem):
     if verificacao != True:
         return verificacao
 
-    data = request.form
+    data = request.json
 
     localizacao = data.get('localizacao')
     descricao = data.get('descricao')
@@ -112,7 +112,7 @@ def obter_trancas_route():
 
 @app.route('/tranca', methods=['POST'])
 def cadastrar_trancas_route():
-    data = request.form
+    data = request.json
 
     numero = data.get('numero')
     localizacao = data.get('localizacao')
@@ -130,7 +130,7 @@ def obter_tranca_por_id_route(id_tranca):
 
 @app.route('/tranca/<int:id_tranca>', methods=['PUT'])
 def editar_tranca_rout(id_tranca):
-    data = request.form
+    data = request.json
 
     numero = data.get('numero')
     localizacao = data.get('localizacao')

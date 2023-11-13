@@ -37,6 +37,24 @@ class TestMain(unittest.TestCase):
             response = client.post('/bicicleta', json=data)
             self.assertEqual(response.status_code, mock_cadastrar_bicicletas.status_code)
 
+    @patch('controller.main.Mock')
+    def test_editar_bicicletas_route(self, mock_editar_bicicletas):
+
+        mock_editar_bicicletas.status_code = 200
+
+        data = {
+            "id": 3,
+            "marca": "teste",
+            "modelo": "teste",
+            "ano": "teste",
+            "numero": "teste",
+            "status": "teste"
+        }
+
+        with app.test_client() as client:
+            response = client.post('/bicicleta', data=2, json=data)
+            self.assertEqual(response.status_code, mock_editar_bicicletas.status_code)
+
 
 if __name__ == '__main__':
     unittest.main()
