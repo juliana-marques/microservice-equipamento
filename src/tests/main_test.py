@@ -110,7 +110,7 @@ class TestMain(unittest.TestCase):
         mock_deletar_totem.status_code = 200
 
         with app.test_client() as client:
-            response = client.delete('/totem1')
+            response = client.delete('/totem/1')
 
             self.assertEqual(response.status_code, mock_deletar_totem.status_code)
 
