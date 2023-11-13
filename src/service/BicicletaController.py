@@ -31,17 +31,17 @@ def listar_bicicletas():
 
 def cadastrar_bicicleta(marca, modelo, ano, numero, status):
     response_mock = Mock()
-    response_mock.status_code = 200
+    response_mock.status_code = "Dados cadastrados", 200
 
-    validacao = False
+    validacao = True
 
-    if validacao == True:
+    if validacao == False:
 
         response_mock.status_code = 422
         response_mock.json.return_value = [
             {
                 "codigo": 422,
-                "mensagem": "Não foi possível cadastrar a bicicleta."
+                "mensagem": "Dados inválidos"
             }
         ]
         return response_mock.json()
@@ -56,4 +56,49 @@ def cadastrar_bicicleta(marca, modelo, ano, numero, status):
     }
 
     return response_mock.json()
+
+def editar_bicicleta(id, marca, modelo, ano, numero, status):
+    response_mock = Mock()
+    response_mock.status_code = "Dados atualizados", 200
+
+    validacao = True
+
+    if validacao == False:
+
+        response_mock.status_code = 422
+        response_mock.json.return_value = [
+            {
+                "codigo": 422,
+                "mensagem": "Dados inválidos."
+            }
+        ]
+        return response_mock.json()
     
+    response_mock.json.return_value = {
+        "id": id,
+        "marca": marca,
+        "modelo": modelo,
+        "ano": ano,
+        "numero": numero,
+        "status": status
+    }
+
+    return response_mock.json()
+
+def validar_id(bicicleta_id):
+    bicicletas = listar_bicicletas()
+
+    for bicicleta in bicicletas:
+        if bicicleta['id'] == bicicleta_id:
+            return True
+        
+    response_mock = Mock()
+    response_mock.status_code = 422
+    response_mock.json.return_value = [
+        {
+            "codigo": 404,
+            "mensagem": "Não encontrado."
+        }
+    ]
+
+    return response_mock.json()
