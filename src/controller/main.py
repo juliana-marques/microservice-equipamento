@@ -13,7 +13,6 @@ from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranc
 
 app = Flask(__name__)
 csrf = CSRFProtect(app)
-csrf().disable()
 
 requests = Mock()
 
@@ -22,12 +21,14 @@ def hello_world():
     return "Hello World! :)"
 
 @app.route('/bicicleta', methods=['GET'])
+@csrf.exempt
 def listar_bicicletas_route():
     bicicletas = listar_bicicletas()
     return bicicletas
 
 
 @app.route('/bicicleta', methods=['POST'])
+@csrf.exempt
 def cadastrar_bicicleta_route():
     data = request.json
 
@@ -42,6 +43,7 @@ def cadastrar_bicicleta_route():
     return response
 
 @app.route('/bicicleta/<int:bicicleta_id>', methods=['PUT'])
+@csrf.exempt
 def editar_bicicleta_route(bicicleta_id):
 
     verificacao = validar_id(bicicleta_id)
@@ -62,17 +64,20 @@ def editar_bicicleta_route(bicicleta_id):
     return response
 
 @app.route('/bicicleta/<int:bicicleta_id>', methods=['DELETE'])
+@csrf.exempt
 def deletar_bicicleta_route(bicicleta_id):
 
     response = deletar_bicicleta(bicicleta_id)
     return response
 
 @app.route('/totem', methods=['GET'])
+@csrf.exempt
 def listar_totens_route():
     totens = listar_totens()
     return totens
 
 @app.route('/totem', methods=['POST'])
+@csrf.exempt
 def cadastrar_totem_route():
     data = request.json
 
@@ -84,6 +89,7 @@ def cadastrar_totem_route():
     return response
 
 @app.route('/totem/<int:id_totem>', methods=['PUT'])
+@csrf.exempt
 def editar_totem_route(id_totem):
 
     verificacao = validar_id_totem(id_totem)
@@ -101,17 +107,20 @@ def editar_totem_route(id_totem):
     return response
 
 @app.route('/totem/<int:id_totem>', methods=['DELETE'])
+@csrf.exempt
 def deletar_totem_route(id_totem):
 
     response = deletar_totem(id_totem)
     return response
 
 @app.route('/tranca', methods=['GET'])
+@csrf.exempt
 def obter_trancas_route():
     trancas = listar_trancas()
     return trancas
 
 @app.route('/tranca', methods=['POST'])
+@csrf.exempt
 def cadastrar_trancas_route():
     data = request.json
 
@@ -125,11 +134,13 @@ def cadastrar_trancas_route():
     return response
 
 @app.route('/tranca/<int:id_tranca>', methods=['GET'])
+@csrf.exempt
 def obter_tranca_por_id_route(id_tranca):
     return buscar_tranca_por_id(id_tranca)
 
 
 @app.route('/tranca/<int:id_tranca>', methods=['PUT'])
+@csrf.exempt
 def editar_tranca_rout(id_tranca):
     data = request.json
 
@@ -142,6 +153,7 @@ def editar_tranca_rout(id_tranca):
     return editar_tranca(id_tranca, numero, localizacao, ano_de_fabricacao, modelo, status)
 
 @app.route('/tranca/<int:id_tranca>', methods=['DELETE'])
+@csrf.exempt
 def deletar_tranca_route(id_tranca):
 
     response = deletar_tranca(id_tranca)
