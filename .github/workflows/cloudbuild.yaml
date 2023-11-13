@@ -53,6 +53,17 @@ jobs:
         coverage run -m unittest src/tests/bicicleta_test.py
         coverage report -m
         deactivate
+
+    - name: Install SonarScanner
+      run: |
+        sudo apt-get install default-jre -y
+        wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.0.2311-linux.zip
+        unzip sonar-scanner-cli-4.6.0.2311-linux.zip
+        export PATH=$PATH:src/sonar-scanner/bin
+
+    - name: Run SonarScanner
+      run: |
+        sonar-scanner -Dsonar.projectKey=juliana-marques_microservice-equipamento -Dsonar.organization=es2 -Dsonar.sources=src -Dsonar.python.coverage.reportPaths=coverage.xml -Dsonar.login=${{ secrets.SONAR_TOKEN }}
     
     - name: Build and Push Docker image
       run: |
