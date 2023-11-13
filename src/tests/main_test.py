@@ -70,7 +70,7 @@ class TestMain(unittest.TestCase):
 
         mock_validar_id_bicicletas_route.status_code = 404
 
-        response = validar_id(4)
+        response = validar_id(46)
 
         self.assertEqual(response.status_code, mock_validar_id_bicicletas_route.status_code)
 
