@@ -89,7 +89,7 @@ def editar_totem_route(id_totem):
     localizacao = data.get('localizacao')
     descricao = data.get('descricao')
 
-    response = editar_totem(idTotem,localizacao, descricao)
+    response = editar_totem(id_totem, localizacao, descricao)
 
     return response
 
@@ -118,19 +118,19 @@ def cadastrar_trancas_route():
     response = cadastrar_tranca(numero, localizacao, anoDeFabricacao, modelo, status)
     return response
 
-@app.route('/tranca/<int:idTranca>', methods=['GET'])
-def obter_tranca_por_id_route(idTranca):
-    return buscar_tranca_por_id(idTranca)
+@app.route('/tranca/<int:id_tranca>', methods=['GET'])
+def obter_tranca_por_id_route(id_tranca):
+    return buscar_tranca_por_id(id_tranca)
 
 
-@app.route('/tranca/<int:idTranca>', methods=['PUT'])
-def editar_tranca_rout(idTranca):
+@app.route('/tranca/<int:id_tranca>', methods=['PUT'])
+def editar_tranca_rout(id_tranca):
     data = request.get_json()
     return editar_tranca(data)
 
-@app.route('/tranca/<int:idTranca>', methods=['DELETE'])
-def deletar_tranca(idTranca):
-    return deletar_tranca(idTranca)
+@app.route('/tranca/<int:id_tranca>', methods=['DELETE'])
+def deletar_tranca(id_tranca):
+    return deletar_tranca(id_tranca)
 
 if __name__ == '__main__':
     app.run(port=int(os.environ.get("PORT", 8080)),host='0.0.0.0',debug=True)
