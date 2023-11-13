@@ -1,5 +1,9 @@
-import unittest
+import unittest, os, sys
 from unittest.mock import Mock, patch
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, project_root)
+
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca, validar_id
 
 from your_module import (
