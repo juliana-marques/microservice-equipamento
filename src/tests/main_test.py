@@ -19,5 +19,14 @@ class TestMain(unittest.TestCase):
 
             self.assertEqual(response.status_code, mock_listar_bicicletas.status_code)
 
+    @patch('controller.main.Mock')
+    def test_cadastrar_bicicletas_route(self, mock_cadastrar_bicicletas):
+
+        mock_cadastrar_bicicletas.status_code = 200
+
+        with app.test_client() as client:
+            response = client.post('/bicicleta')
+
+            self.assertEqual(response.status_code, mock_cadastrar_bicicletas.status_code)
 if __name__ == '__main__':
     unittest.main()
