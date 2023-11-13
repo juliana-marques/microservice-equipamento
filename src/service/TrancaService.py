@@ -74,7 +74,7 @@ def buscar_tranca_por_id(idTranca):
             "codigo": 404,
             "mensagem": "Não encontrado."
         }
-        
+
         return retorno
         
    
@@ -84,6 +84,15 @@ def buscar_tranca_por_id(idTranca):
             response_mock.json.return_value = tranca
 
     return response_mock.json.return_value
+
+
+def editar_tranca(data, idTranca):
+
+    tranca = buscar_tranca_por_id(idTranca)
+    
+    tranca = data
+    
+    return tranca
 
             
 def validar_id(idTranca):
