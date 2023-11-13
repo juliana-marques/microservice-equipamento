@@ -2,7 +2,7 @@ import os, sys
 from flask import Flask
 from flask import request
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 sys.path.insert(0, project_root)
 
 from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id, deletar_bicicleta
