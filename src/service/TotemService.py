@@ -72,11 +72,11 @@ def editar_totem(id, localizacao, descricao):
 
     return response_mock.json()
 
-def validar_id_totem(idTotem):
+def validar_id_totem(id_totem):
     totens = listar_totens()
 
     for totem in totens:
-        if totem['id'] == idTotem:
+        if totem['id'] == id_totem:
             return True
         
     response_mock = Mock()
@@ -90,14 +90,14 @@ def validar_id_totem(idTotem):
 
     return response_mock.json()
 
-def deletar_totem(idTotem):
+def deletar_totem(id_totem):
     response_mock = Mock()
     response_mock.status_code = 200
     response_mock.json.return_value = "Dados removidos"
 
     totens = listar_totens()
     for totem in totens:
-        if totem['id'] == idTotem:
+        if totem['id'] == id_totem:
             totens.remove(totem)
             return response_mock.json()
     

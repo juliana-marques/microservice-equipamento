@@ -76,10 +76,10 @@ def cadastrar_totem_route():
 
     return response
 
-@app.route('/totem/<int:idTotem>', methods=['PUT'])
-def editar_totem_route(idTotem):
+@app.route('/totem/<int:id_totem>', methods=['PUT'])
+def editar_totem_route(id_totem):
 
-    verificacao = validar_id_totem(idTotem)
+    verificacao = validar_id_totem(id_totem)
 
     if verificacao != True:
         return verificacao
@@ -93,10 +93,10 @@ def editar_totem_route(idTotem):
 
     return response
 
-@app.route('/totem/<int:idTotem>', methods=['DELETE'])
-def deletar_totem_route(idTotem):
+@app.route('/totem/<int:id_totem>', methods=['DELETE'])
+def deletar_totem_route(id_totem):
 
-    response = deletar_totem(idTotem)
+    response = deletar_totem(id_totem)
     return response
 
 @app.route('/tranca', methods=['GET'])

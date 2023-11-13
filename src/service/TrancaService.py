@@ -12,7 +12,7 @@ def listar_trancas():
         "bicicleta": 101,
         "numero": 1,
         "localizacao": "Botafogo",
-        "anoDeFabricacao": "2022",
+        "ano_de_fabricacao": "2022",
         "modelo": "Modelo A",
         "status": "Disponível"
     },
@@ -21,7 +21,7 @@ def listar_trancas():
         "bicicleta": 102,
         "numero": 2,
         "localizacao": "Flamengo",
-        "anoDeFabricacao": "2021",
+        "ano_de_fabricacao": "2021",
         "modelo": "Modelo B",
         "status": "Ocupada"
     },
@@ -30,7 +30,7 @@ def listar_trancas():
         "bicicleta": 103,
         "numero": 3,
         "localizacao": "Copacabana",
-        "anoDeFabricacao": "2023",
+        "ano_de_fabricacao": "2023",
         "modelo": "Modelo C",
         "status": "Disponível"
     }
@@ -38,7 +38,7 @@ def listar_trancas():
     return response_mock.json()
 
 
-def cadastrar_tranca(numero, localizacao, anoDeFabricacao, modelo, status):
+def cadastrar_tranca(numero, localizacao, ano_de_fabricacao, modelo, status):
     response_mock = Mock()
     response_mock.status_code = "Dados cadastrados", 200
 
@@ -58,17 +58,17 @@ def cadastrar_tranca(numero, localizacao, anoDeFabricacao, modelo, status):
     response_mock.json.return_value = {
         "numero": numero,
         "localizacao": localizacao,
-        "anoDeFabricacao": anoDeFabricacao,
+        "ano_de_fabricacao": ano_de_fabricacao,
         "modelo":  modelo,
         "status": status
     }
     return response_mock.json()
 
-def buscar_tranca_por_id(idTranca):
+def buscar_tranca_por_id(id_tranca):
     response_mock = Mock()
-    idExists = validar_id(idTranca)
+    id_exists = validar_id(id_tranca)
 
-    if idExists == False:
+    if id_exists == False:
         response_mock.status_code = 404
         retorno = {
             "codigo": 404,
@@ -80,31 +80,30 @@ def buscar_tranca_por_id(idTranca):
    
     trancas = listar_trancas()
     for tranca in trancas:
-        if tranca['numero'] == idTranca:
+        if tranca['numero'] == id_tranca:
             response_mock.json.return_value = tranca
 
     return response_mock.json.return_value
 
 
-def editar_tranca(data, idTranca):
+def editar_tranca(data, id_tranca):
 
-    tranca = buscar_tranca_por_id(idTranca)
-    tranca = data
-    return tranca
+    tranca = buscar_tranca_por_id(id_tranca)
+    return data
 
-def deletar_tranca(idTranca):
+def deletar_tranca(id_tranca):
     response_mock = Mock()
     response_mock.status_code = 200
     response_mock.json.return_value = "Tranca removida"
     trancas = listar_trancas()
     for tranca in trancas:
-        if tranca['numero'] == idTranca:
+        if tranca['numero'] == id_tranca:
             trancas.remove(tranca)
             return response_mock.json()
         
-def validar_id(idTranca):
+def validar_id(id_tranca):
     trancas = listar_trancas()
     for tranca in trancas:
-        if tranca['numero'] == idTranca:
+        if tranca['numero'] == id_tranca:
             return True
     return False

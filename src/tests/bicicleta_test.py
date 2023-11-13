@@ -64,7 +64,7 @@ class TestBicicletaService(unittest.TestCase):
 
     @patch('service.BicicletaService.Mock')
     def test_editar_bicicleta(self, mock_request):
-        id = 1  
+        id_bicicleta = 1  
         marca = "NovaMarca"
         modelo = "NovoModelo"
         ano = "2024"
@@ -74,7 +74,7 @@ class TestBicicletaService(unittest.TestCase):
         response_mock = Mock()
         response_mock.status_code = 200
         response_mock.json.return_value = {
-            "id": id,
+            "id": id_bicicleta,
             "marca": marca,
             "modelo": modelo,
             "ano": ano,

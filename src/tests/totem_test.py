@@ -52,14 +52,14 @@ class TestTotemService(unittest.TestCase):
 
     @patch('service.TotemService.Mock')
     def test_editar_totem(self, mock_request):
-        id = 1  
+        id_totem = 1  
         localizacao = "localizacao"
         descricao = "descricao"
 
         response_mock = Mock()
         response_mock.status_code = 200
         response_mock.json.return_value = {
-            "id": id,
+            "id": id_totem,
             "localizacao": localizacao,
             "descricao": descricao
         }
