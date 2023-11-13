@@ -5,11 +5,9 @@ from flask import request
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
-
-
-from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta
-from service.TrancaService import listar_trancas, cadastrar_tranca
-
+from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id, deletar_bicicleta
+from service.TotemService import listar_totens, cadastrar_totem, editar_totem, validar_id_totem, deletar_totem
+from service.TrancaService import listar_trancas#, cadastrar_tranca
 
 
 app = Flask(__name__)
@@ -52,6 +50,51 @@ def editar_bicicleta_route(bicicleta_id):
 
     response = editar_bicicleta(bicicleta_id, marca, modelo, ano, numero, status)
 
+    return response
+
+@app.route('/bicicleta/<int:bicicleta_id>', methods=['DELETE'])
+def deletar_bicicleta_route(bicicleta_id):
+
+    response = deletar_bicicleta(bicicleta_id)
+    return response
+
+@app.route('/totem', methods=['GET'])
+def listar_totens_route():
+    totens = listar_totens()
+    return totens
+
+@app.route('/totem', methods=['POST'])
+def cadastrar_totem_route():
+    data = request.form
+
+    localizacao = data.get('localizacao')
+    descricao = data.get('descricao')
+
+    response = cadastrar_totem(localizacao, descricao)
+
+    return response
+
+@app.route('/totem/<int:idTotem>', methods=['PUT'])
+def editar_totem_route(idTotem):
+
+    verificacao = validar_id_totem(idTotem)
+
+    if verificacao != True:
+        return verificacao
+
+    data = request.form
+
+    localizacao = data.get('localizacao')
+    descricao = data.get('descricao')
+
+    response = editar_totem(idTotem,localizacao, descricao)
+
+    return response
+
+@app.route('/totem/<int:idTotem>', methods=['DELETE'])
+def deletar_totem_route(idTotem):
+
+    response = deletar_totem(idTotem)
     return response
 
 @app.route('/tranca', methods=['GET'])
