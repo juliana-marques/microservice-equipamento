@@ -127,7 +127,14 @@ def obter_tranca_por_id_route(id_tranca):
 @app.route('/tranca/<int:id_tranca>', methods=['PUT'])
 def editar_tranca_rout(id_tranca):
     data = request.form
-    return editar_tranca(data, id_tranca)
+
+    numero = data.get('numero')
+    localizacao = data.get('localizacao')
+    ano_de_fabricacao = data.get('ano_de_fabricacao')
+    modelo = data.get('modelo')
+    status = data.get('status')
+
+    return editar_tranca(id_tranca, numero, localizacao, ano_de_fabricacao, modelo, status)
 
 @app.route('/tranca/<int:id_tranca>', methods=['DELETE'])
 def deletar_tranca_route(id_tranca):

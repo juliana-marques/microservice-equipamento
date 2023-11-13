@@ -99,7 +99,7 @@ class TestTrancaService(unittest.TestCase):
 
         mock_request.return_value = response_mock
 
-        result = editar_tranca(id_tranca)
+        result = editar_tranca(id_tranca, numero, localizacao, ano_de_fabricacao, modelo, status)
         self.assertEqual(result['modelo'], modelo)
         self.assertEqual(result['ano_de_fabricacao'], ano_de_fabricacao)
 

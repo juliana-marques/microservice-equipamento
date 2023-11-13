@@ -86,17 +86,11 @@ def buscar_tranca_por_id(id_tranca):
     return response_mock.json()
 
 
-def editar_tranca(data, id_tranca):
+def editar_tranca(id_tranca, numero, localizacao, ano_de_fabricacao, modelo, status):
     response_mock = Mock()
     tranca = buscar_tranca_por_id(id_tranca)
     response_mock.status_code = "Dados atualizados", 200
     id_exists = validar_id(id_tranca)
-
-    numero = data.get('numero')
-    localizacao = data.get('localizacao')
-    ano_de_fabricacao = data.get('ano_de_fabricacao')
-    modelo = data.get('modelo')
-    status = data.get('status')
 
     if id_exists == False:
         response_mock.status_code = 404
@@ -141,7 +135,7 @@ def deletar_tranca(id_tranca):
         
 def validar_id(id_tranca):
     trancas = listar_trancas()
-    print(trancas)
+
     for tranca in trancas:
         if tranca['id'] == id_tranca:
             return True
