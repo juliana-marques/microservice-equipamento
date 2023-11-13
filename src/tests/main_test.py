@@ -72,7 +72,7 @@ class TestMain(unittest.TestCase):
 
         response = validar_id(46)
 
-        self.assertEqual(response['codigo'], mock_validar_id_bicicletas_route.status_code)
+        self.assertEqual(response[0]['codigo'], mock_validar_id_bicicletas_route.status_code)
 
 
 if __name__ == '__main__':
