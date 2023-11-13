@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import Mock, patch
+from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca, validar_id
+
 from your_module import (
     listar_trancas,
     cadastrar_tranca,
@@ -36,7 +38,7 @@ class TestAppFunctions(unittest.TestCase):
                 "modelo": "Modelo B",
                 "status": "Ocupada"
             }
-            # ... (other mock data)
+            
         ]
 
         with patch('your_module.listar_trancas', return_value=mock_response.json()):
