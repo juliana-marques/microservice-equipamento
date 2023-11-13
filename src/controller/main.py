@@ -12,7 +12,8 @@ from service.TotemService import listar_totens, cadastrar_totem, editar_totem, v
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca
 
 app = Flask(__name__)
-#csrf = CSRFProtect(app)
+csrf = CSRFProtect(app)
+csrf().disable()
 
 requests = Mock()
 
