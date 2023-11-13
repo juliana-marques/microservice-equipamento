@@ -12,7 +12,7 @@ class TestMain(unittest.TestCase):
     @patch('controller.main.Mock')
     def test_listar_bicicletas_route(self, mock_listar_bicicletas):
 
-        mock_listar_bicicletas.return_value = "Bicicletas listadas"
+        mock_listar_bicicletas.status_code = "Bicicletas listadas"
 
         with app.test_client() as client:
             response = client.get('/bicicleta')
