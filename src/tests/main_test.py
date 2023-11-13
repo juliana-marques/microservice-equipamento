@@ -24,9 +24,20 @@ class TestMain(unittest.TestCase):
 
         mock_cadastrar_bicicletas.status_code = 200
 
-        with app.test_client() as client:
-            response = client.post('/bicicleta')
+        data = {
+            "id": 3,
+            "marca": "teste",
+            "modelo": "teste",
+            "ano": "teste",
+            "numero": "teste",
+            "status": "teste"
+    
+        }
 
+        with app.test_client() as client:
+            response = client.post('/bicicleta', data=data)
             self.assertEqual(response.status_code, mock_cadastrar_bicicletas.status_code)
+
+
 if __name__ == '__main__':
     unittest.main()
