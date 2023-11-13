@@ -31,7 +31,6 @@ class TestMain(unittest.TestCase):
             "ano": "teste",
             "numero": "teste",
             "status": "teste"
-    
         }
 
         with app.test_client() as client:

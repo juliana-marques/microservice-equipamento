@@ -12,7 +12,7 @@ from service.TotemService import listar_totens, cadastrar_totem, editar_totem, v
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca
 
 app = Flask(__name__)
-csrf = CSRFProtect(app)
+#csrf = CSRFProtect(app)
 
 requests = Mock()
 
@@ -28,7 +28,7 @@ def listar_bicicletas_route():
 
 @app.route('/bicicleta', methods=['POST'])
 def cadastrar_bicicleta_route():
-    data = request.form
+    data = request.json
 
     marca = data.get('marca')
     modelo = data.get('modelo')
