@@ -1,6 +1,7 @@
 import os, sys
 from flask import Flask
 from flask import request
+from unittest.mock import Mock
 from flask_wtf import CSRFProtect
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -9,8 +10,11 @@ sys.path.insert(0, project_root)
 from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id, deletar_bicicleta
 from service.TotemService import listar_totens, cadastrar_totem, editar_totem, validar_id_totem, deletar_totem
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca
+
 app = Flask(__name__)
 csrf = CSRFProtect(app)
+
+requests = Mock()
 
 @app.route('/', methods=['GET'])
 def hello_world():

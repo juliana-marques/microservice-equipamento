@@ -9,7 +9,7 @@ from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, edi
 
 class TestMain(unittest.TestCase):
 
-    @patch(listar_bicicletas)
+    @patch('controller.main.Mock')
     def test_listar_bicicletas_route(self, mock_listar_bicicletas):
 
         mock_listar_bicicletas.return_value = "Bicicletas listadas"
