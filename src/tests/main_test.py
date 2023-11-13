@@ -12,12 +12,12 @@ class TestMain(unittest.TestCase):
     @patch('controller.main.Mock')
     def test_listar_bicicletas_route(self, mock_listar_bicicletas):
 
-        mock_listar_bicicletas.status_code = "Bicicletas listadas"
+        mock_listar_bicicletas.status_code = 200
 
         with app.test_client() as client:
             response = client.get('/bicicleta')
 
-            self.assertEqual(response.status_code, "Bicicletas listadas")
+            self.assertEqual(response.status_code, mock_listar_bicicletas.status_code)
 
 if __name__ == '__main__':
     unittest.main()
