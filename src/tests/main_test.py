@@ -34,7 +34,7 @@ class TestMain(unittest.TestCase):
         }
 
         with app.test_client() as client:
-            response = client.post('/bicicleta', data=data)
+            response = client.post('/bicicleta', json=data)
             self.assertEqual(response.status_code, mock_cadastrar_bicicletas.status_code)
 
 
