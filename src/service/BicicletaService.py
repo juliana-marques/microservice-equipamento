@@ -32,6 +32,19 @@ def listar_bicicletas():
 def cadastrar_bicicleta(marca, modelo, ano, numero, status):
     response_mock = Mock()
     response_mock.status_code = 200
+
+    validacao = False
+
+    if validacao == True:
+
+        response_mock.status_code = 422
+        response_mock.json.return_value = [
+            {
+                "codigo": 422,
+                "mensagem": "Não foi possível cadastrar a bicicleta."
+            }
+        ]
+        return response_mock.json()
     
     response_mock.json.return_value = {
         "id": 3,
