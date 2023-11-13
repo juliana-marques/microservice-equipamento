@@ -42,7 +42,7 @@ jobs:
         python -m venv venv
         source venv/bin/activate
         pip install Flask gunicorn requests mock
-        python tests/totem_test.py
+        python src/tests/totem_test.py
         deactivate 
     
     - name: Build and Push Docker image
