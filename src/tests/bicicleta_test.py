@@ -88,5 +88,14 @@ class TestBicicletaService(unittest.TestCase):
         self.assertEqual(result['marca'], marca)
         self.assertEqual(result['ano'], ano)
 
+    @patch('service.BicicletaService.Mock')
+    def test_validar_id_bicicletas_route(self, mock_validar_id_bicicletas_route):
+
+        mock_validar_id_bicicletas_route.status_code = 404
+
+        response = validar_id(46)
+
+        self.assertEqual(response[0]['codigo'], mock_validar_id_bicicletas_route.status_code)
+
 if __name__ == '__main__':
     unittest.main()
