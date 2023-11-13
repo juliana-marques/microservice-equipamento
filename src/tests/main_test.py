@@ -43,7 +43,7 @@ class TestMain(unittest.TestCase):
         mock_editar_bicicletas.status_code = 200
 
         data = {
-            "id": 3,
+            "id": 2,
             "marca": "teste",
             "modelo": "teste",
             "ano": "teste",
