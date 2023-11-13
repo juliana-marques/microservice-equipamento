@@ -111,11 +111,11 @@ def cadastrar_trancas_route():
 
     numero = data.get('numero')
     localizacao = data.get('localizacao')
-    anoDeFabricacao = data.get('anoDeFabricacao')
+    ano_de_fabricacao = data.get('ano_de_fabricacao')
     modelo = data.get('modelo')
     status = data.get('status')
 
-    response = cadastrar_tranca(numero, localizacao, anoDeFabricacao, modelo, status)
+    response = cadastrar_tranca(numero, localizacao, ano_de_fabricacao, modelo, status)
     return response
 
 @app.route('/tranca/<int:id_tranca>', methods=['GET'])
