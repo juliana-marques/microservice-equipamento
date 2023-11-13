@@ -10,7 +10,7 @@ from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, edi
 from service.TotemService import listar_totens, cadastrar_totem, editar_totem, validar_id_totem, deletar_totem
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca
 app = Flask(__name__)
-#csrf = CSRFProtect(app)
+csrf = CSRFProtect(app)
 
 @app.route('/', methods=['GET'])
 def hello_world():
