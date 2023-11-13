@@ -71,9 +71,8 @@ class TestMain(unittest.TestCase):
         mock_validar_id_bicicletas_route.status_code = 404
 
         response = validar_id(46)
-        print(response)
 
-        self.assertEqual(response.status_code, mock_validar_id_bicicletas_route.status_code)
+        self.assertEqual(response['codigo'], mock_validar_id_bicicletas_route.status_code)
 
 
 if __name__ == '__main__':
