@@ -5,7 +5,7 @@ from flask import request
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
-from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id
+from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id, deletar_bicicleta
 from service.TrancaService import listar_trancas
 
 
@@ -50,6 +50,13 @@ def editar_bicicleta_route(bicicleta_id):
     response = editar_bicicleta(bicicleta_id, marca, modelo, ano, numero, status)
 
     return response
+
+@app.route('/bicicleta/<int:bicicleta_id>', methods=['DELETE'])
+def deletar_bicicleta_route(bicicleta_id):
+
+    response = deletar_bicicleta(bicicleta_id)
+    return response
+
 
 @app.route('/tranca', methods=['GET'])
 def obter_trancas_route():

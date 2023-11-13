@@ -1,5 +1,5 @@
-import logging, mock
-from unittest.mock import Mock
+import logging, mock, unittest
+from unittest.mock import Mock, MagicMock
 
 requests = Mock()
 
@@ -84,6 +84,30 @@ def editar_bicicleta(id, marca, modelo, ano, numero, status):
     }
 
     return response_mock.json()
+
+
+def deletar_bicicleta(bicicleta_id):
+
+    response_mock = Mock()
+    response_mock.status_code = 200
+    response_mock.json.return_value = "Dados removidos"
+
+    bicicletas = listar_bicicletas()
+    for bicicleta in bicicletas:
+        if bicicleta['id'] == bicicleta_id:
+            bicicletas.remove(bicicleta)
+            return response_mock.json()
+    
+    response_mock.status_code = 422
+    response_mock.json.return_value = [
+        {
+            "codigo": 404,
+            "mensagem": "Não encontrado"
+        }
+    ]
+
+    return response_mock.json()
+
 
 def validar_id(bicicleta_id):
     bicicletas = listar_bicicletas()
