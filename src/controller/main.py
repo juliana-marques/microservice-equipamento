@@ -5,7 +5,12 @@ from flask import request
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
+
 from service.BicicletaController import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id
+
+from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta
+from service.TrancaService import listar_trancas
+
 
 app = Flask(__name__)
 
@@ -48,6 +53,13 @@ def editar_bicicleta_route(bicicleta_id):
     response = editar_bicicleta(bicicleta_id, marca, modelo, ano, numero, status)
 
     return response
+
+@app.route('/tranca', methods=['GET'])
+def obter_trancas_route():
+    # Resposta bem-sucedida (200 OK)
+    trancas = listar_trancas()
+    return trancas
+
 
 if __name__ == '__main__':
     app.run(port=int(os.environ.get("PORT", 4000)),host='0.0.0.0',debug=True)
