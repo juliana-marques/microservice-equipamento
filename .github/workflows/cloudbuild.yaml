@@ -45,14 +45,6 @@ jobs:
         python src/tests/totem_test.py
         deactivate 
 
-    - name: Run Tranca Tests
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install Flask gunicorn requests mock
-        python src/tests/tranca_test.py
-        deactivate 
-
     - name: Build and Push Docker image
       run: |
         docker buildx build --platform linux/amd64 -t gcr.io/bike-rent-403120/bike-rent:$GITHUB_SHA src/

@@ -65,10 +65,8 @@ class TestAppFunctions(unittest.TestCase):
 
     @patch('service.TrancaService.Mock')
     def test_buscar_tranca_por_id(self, mock_response):
-        # Mocking the ID for testing
         id_tranca = 1
 
-        # Mocking the response from your service function
         mock_response.status_code = "Encontrado", 200
         mock_response.json.return_value = {
             "id": id_tranca,
@@ -130,5 +128,6 @@ class TestAppFunctions(unittest.TestCase):
             result = validar_id(id_tranca)
 
         self.assertEqual(result, mock_response.json())
+
 if __name__ == '__main__':
     unittest.main()

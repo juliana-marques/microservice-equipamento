@@ -103,7 +103,6 @@ def deletar_totem_route(id_totem):
 
 @app.route('/tranca', methods=['GET'])
 def obter_trancas_route():
-    # Resposta bem-sucedida (200 OK)
     trancas = listar_trancas()
     return trancas
 
