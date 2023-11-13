@@ -117,8 +117,7 @@ def cadastrar_trancas_route():
 
 @app.route('/tranca/<int:idTranca>', methods=['GET'])
 def obter_traca_por_id_route(idTranca):
-    data = request.get_json()
-
+    
     return buscar_tranca_por_id(idTranca)
 
 

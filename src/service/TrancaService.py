@@ -66,26 +66,29 @@ def cadastrar_tranca(numero, localizacao, anoDeFabricacao, modelo, status):
 
 def buscar_tranca_por_id(idTranca):
     response_mock = Mock()
-    response_mock.status_code = "Tranca encontrada", 200
     idExists = validar_id(idTranca)
 
     if idExists == False:
         response_mock.status_code = 404
-        response_mock.json.return_value = [
-            {
-                "codigo": response_mock.status_code,
-                "mensagem": "Não encontrado"
-            }
-        ]
+        retorno = {
+            "codigo": 404,
+            "mensagem": "Não encontrado."
+        }
+        
+        return retorno
+        
+   
     trancas = listar_trancas()
-    
     for tranca in trancas:
         if tranca['numero'] == idTranca:
             response_mock.json.return_value = tranca
-            return response_mock.json.return_value
 
+    return response_mock.json.return_value
+
+            
 def validar_id(idTranca):
     trancas = listar_trancas()
     for tranca in trancas:
-        if tranca.numero == idTranca:
+        if tranca['numero'] == idTranca:
             return True
+    return False
