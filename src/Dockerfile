@@ -1,6 +1,6 @@
 FROM python:3.9
 WORKDIR /app
-RUN adduser --disabled-password --gecos '' appuserRUN adduser --disabled-password --gecos '' appuser
+RUN adduser --disabled-password --gecos '' appuser
 RUN pip install Flask gunicorn requests mock flask_wtf
 COPY ./controller/*.py /app/controller/
 COPY ./service/*.py /app/service/
