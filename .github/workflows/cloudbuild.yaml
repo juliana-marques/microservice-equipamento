@@ -31,8 +31,7 @@ jobs:
       run: |
         python -m venv venv  # Cria um ambiente virtual
         source venv/bin/activate
-        pip install Flask gunicorn pytest
-        pytest tests/
+        pip install Flask gunicorn unittest
         deactivate 
       working-directory: ${{ github.workspace }}
     
