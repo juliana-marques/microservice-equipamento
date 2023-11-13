@@ -2,6 +2,7 @@ import logging, mock
 from unittest.mock import Mock
 
 
+
 def listar_trancas():
     response_mock = Mock()
     response_mock.status_code = 200
@@ -61,6 +62,30 @@ def cadastrar_tranca(numero, localizacao, anoDeFabricacao, modelo, status):
         "modelo":  modelo,
         "status": status
     }
-
-
     return response_mock.json()
+
+def buscar_tranca_por_id(idTranca):
+    response_mock = Mock()
+    response_mock.status_code = "Tranca encontrada", 200
+    idExists = validar_id(idTranca)
+
+    if idExists == False:
+        response_mock.status_code = 404
+        response_mock.json.return_value = [
+            {
+                "codigo": response_mock.status_code,
+                "mensagem": "Não encontrado"
+            }
+        ]
+    trancas = listar_trancas()
+    
+    for tranca in trancas:
+        if tranca['numero'] == idTranca:
+            response_mock.json.return_value = tranca
+            return response_mock.json.return_value
+
+def validar_id(idTranca):
+    trancas = listar_trancas()
+    for tranca in trancas:
+        if tranca.numero == idTranca:
+            return True
