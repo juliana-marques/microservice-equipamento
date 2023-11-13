@@ -16,8 +16,18 @@ def listar_bicicletas_route():
 
 
 @app.route('/bicicleta', methods=['POST'])
-def cadastrar_bicicleta_route(marca, modelo, ano, numero, status):
-    cadastrar_bicicleta(marca, modelo, ano, numero, status)
+def cadastrar_bicicleta_route():
+    data = request.form
+
+    marca = data.get('marca')
+    modelo = data.get('modelo')
+    ano = data.get('ano')
+    numero = data.get('numero')
+    status = data.get('status')
+
+    response = cadastrar_bicicleta(marca, modelo, ano, numero, status)
+
+    return response
 
 
 if __name__ == '__main__':
