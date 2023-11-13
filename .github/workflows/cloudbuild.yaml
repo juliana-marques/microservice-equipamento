@@ -1,0 +1,51 @@
+name: Deploy to Cloud Run
+
+on:
+ push:
+    tags:
+      - v*
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2
+      with:
+        project_id: bike-rent-403120
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+
+    - name: Update Google Cloud SDK
+      run: gcloud components update
+
+    - name: Configure Docker authentication for Google Container Registry
+      run: gcloud auth configure-docker
+
+    - name: Run Tests
+      run: |
+        python -m venv venv  # Cria um ambiente virtual
+        source venv/bin/activate
+        pip install Flask gunicorn pytest
+        pytest tests/
+        deactivate 
+      working-directory: ${{ github.workspace }}
+    
+    - name: Build and Push Docker image
+      run: |
+        docker buildx build --platform linux/amd64 -t gcr.io/bike-rent-403120/bike-rent:$GITHUB_SHA .
+        docker push gcr.io/bike-rent-403120/bike-rent:$GITHUB_SHA
+
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy bike-rent \
+          --image gcr.io/bike-rent-403120/bike-rent:$GITHUB_SHA \
+          --platform managed \
+          --region us-central1
+
+# version 1.0
