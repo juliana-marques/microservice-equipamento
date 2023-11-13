@@ -116,7 +116,6 @@ def cadastrar_trancas_route():
     status = data.get('status')
 
     response = cadastrar_tranca(numero, localizacao, anoDeFabricacao, modelo, status)
-
     return response
 
 @app.route('/tranca/<int:idTranca>', methods=['GET'])
