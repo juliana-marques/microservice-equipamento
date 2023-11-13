@@ -5,15 +5,11 @@ from flask import request
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
-<<<<<<< HEAD
 
 
 from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta
 from service.TrancaService import listar_trancas, cadastrar_tranca
-=======
-from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id
-from service.TrancaService import listar_trancas
->>>>>>> cc326878a96747e80a0cb5c5971a0625bceed104
+
 
 
 app = Flask(__name__)
