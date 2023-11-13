@@ -114,6 +114,61 @@ class TestMain(unittest.TestCase):
 
             self.assertEqual(response.status_code, mock_deletar_totem.status_code)
 
+    @patch('controller.main.Mock')
+    def test_listar_tranca_route(self, mock_listar_tranca):
+
+        mock_listar_tranca.status_code = 200
+
+        with app.test_client() as client:
+            response = client.get('/tranca')
+
+            self.assertEqual(response.status_code, mock_listar_tranca.status_code)
+
+    @patch('controller.main.Mock')
+    def test_cadastrar_tranca_route(self, mock_cadastrar_tranca):
+
+        mock_cadastrar_tranca.status_code = 200
+
+        data = {
+            "id": 2,
+            "numero": "teste",
+            "localizacao": "teste",
+            "ano_de_fabricacao": "teste",
+            "modelo": "teste",
+            "status": "teste"
+        }
+
+        with app.test_client() as client:
+            response = client.post('/tranca', json=data)
+            self.assertEqual(response.status_code, mock_cadastrar_tranca.status_code)
+
+    @patch('controller.main.Mock')
+    def test_editar_tranca_route(self, mock_editar_tranca):
+
+        mock_editar_tranca.status_code = 200
+
+        data = {
+            "id": 3,
+            "numero": "teste",
+            "localizacao": "teste",
+            "ano_de_fabricacao": "teste",
+            "modelo": "teste",
+            "status": "teste"
+        }
+
+        with app.test_client() as client:
+            response = client.put('/tranca/2', json=data)
+            self.assertEqual(response.status_code, mock_editar_tranca.status_code)
+
+    @patch('controller.main.Mock')
+    def test_deletar_tranca_route(self, mock_deletar_tranca):
+
+        mock_deletar_tranca.status_code = 200
+
+        with app.test_client() as client:
+            response = client.delete('/tranca/2')
+
+            self.assertEqual(response.status_code, mock_deletar_tranca.status_code)
 
 if __name__ == '__main__':
     unittest.main()
