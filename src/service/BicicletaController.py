@@ -6,8 +6,7 @@ requests = Mock()
 def listar_bicicletas():
     response_mock = Mock()
     response_mock.status_code = 200
-    response_mock.json.return_value = {
-        [
+    response_mock.json.return_value = [
             {
                 "id": 1,
                 "marca": "adidas",
@@ -25,7 +24,7 @@ def listar_bicicletas():
                 "status": "utilizada"
             },
         ]
-    }
+    
 
     return response_mock.json()
 
