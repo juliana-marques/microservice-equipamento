@@ -17,7 +17,7 @@ class TestMain(unittest.TestCase):
         with app.test_client() as client:
             response = client.get('/bicicleta')
 
-            self.assertEqual(response.data.decode(), "Bicicletas listadas")
+            self.assertEqual(response.status_code, "Bicicletas listadas")
 
 if __name__ == '__main__':
     unittest.main()
