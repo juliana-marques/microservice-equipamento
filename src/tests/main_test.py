@@ -65,6 +65,15 @@ class TestMain(unittest.TestCase):
 
             self.assertEqual(response.status_code, mock_deletar_bicicletas.status_code)
 
+    @patch('controller.main.Mock')
+    def test_validar_id_bicicletas_route(self, mock_validar_id_bicicletas_route):
+
+        mock_validar_id_bicicletas_route.status_code = 404
+
+        response = validar_id(4)
+
+        self.assertEqual(response.status_code, mock_validar_id_bicicletas_route.status_code)
+
 
 if __name__ == '__main__':
     unittest.main()
