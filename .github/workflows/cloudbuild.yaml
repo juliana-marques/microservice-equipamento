@@ -45,7 +45,7 @@ jobs:
         python src/tests/totem_test.py
         deactivate 
 
-   - name: Run Coverage Tests
+    - name: Run Coverage Tests
       run: |
         python -m venv venv
         source venv/bin/activate
