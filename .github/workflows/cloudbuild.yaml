@@ -2,8 +2,10 @@ name: Deploy to Cloud Run
 
 on:
  push:
-    tags:
-      - v*
+    #tags:
+    branches:
+      #- v*
+      - main
 
 jobs:
 
@@ -26,18 +28,10 @@ jobs:
 
     - name: Configure Docker authentication for Google Container Registry
       run: gcloud auth configure-docker
-
-    - name: Run Tests
-      run: |
-        python -m venv venv  # Cria um ambiente virtual
-        source venv/bin/activate
-        pip install Flask gunicorn unittest
-        deactivate 
-      working-directory: ${{ github.workspace }}
     
     - name: Build and Push Docker image
       run: |
-        docker buildx build --platform linux/amd64 -t gcr.io/bike-rent-403120/bike-rent:$GITHUB_SHA .
+        docker buildx build --platform linux/amd64 -t gcr.io/bike-rent-403120/bike-rent:$GITHUB_SHA src/controller/
         docker push gcr.io/bike-rent-403120/bike-rent:$GITHUB_SHA
 
     - name: Deploy to Cloud Run
