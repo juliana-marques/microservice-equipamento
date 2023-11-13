@@ -55,6 +55,16 @@ class TestMain(unittest.TestCase):
             response = client.put('/bicicleta/2', json=data)
             self.assertEqual(response.status_code, mock_editar_bicicletas.status_code)
 
+    @patch('controller.main.Mock')
+    def test_deletar_bicicletas_route(self, mock_deletar_bicicletas):
+
+        mock_deletar_bicicletas.status_code = 200
+
+        with app.test_client() as client:
+            response = client.delete('/bicicleta/2')
+
+            self.assertEqual(response.status_code, mock_deletar_bicicletas.status_code)
+
 
 if __name__ == '__main__':
     unittest.main()
