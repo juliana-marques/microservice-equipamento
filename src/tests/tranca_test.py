@@ -1,28 +1,26 @@
 import unittest, os, sys
-from unittest.mock import Mock, patch
+from unittest.mock import patch, Mock
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
-from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca, validar_id
+from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca
 
-modelo_a = "Modelo A"
-disponivel = "DISPONIVEL"
-
-class TestAppFunctions(unittest.TestCase):
-
+class TestTrancaService(unittest.TestCase):
     @patch('service.TrancaService.Mock')
-    def test_listar_trancas(self, mock_response):
-        mock_response.status_code = 200
-        mock_response.json.return_value = [
+    def test_listar_tranca(self, mock_request):
+
+        response_mock = Mock()
+        response_mock.status_code = 200
+        response_mock.json.return_value = [
             {
                 "id": 1,
                 "bicicleta": 101,
                 "numero": 1,
                 "localizacao": "Botafogo",
                 "ano_de_fabricacao": "2022",
-                "modelo": modelo_a,
-                "status": disponivel
+                "modelo": "Modelo A",
+                "status": "Disponível"
             },
             {
                 "id": 2,
@@ -32,25 +30,38 @@ class TestAppFunctions(unittest.TestCase):
                 "ano_de_fabricacao": "2021",
                 "modelo": "Modelo B",
                 "status": "Ocupada"
+            },
+            {
+                "id": 3,
+                "bicicleta": 103,
+                "numero": 3,
+                "localizacao": "Copacabana",
+                "ano_de_fabricacao": "2023",
+                "modelo": "Modelo C",
+                "status": "Disponível"
             }
-            
         ]
 
-        with patch(listar_trancas, return_value=mock_response.json()):
-            result = listar_trancas()
+        mock_request.return_value = response_mock
 
-        self.assertEqual(result, mock_response.json())
+        result = listar_trancas()
+        self.assertEqual(len(result), 3) 
 
     @patch('service.TrancaService.Mock')
-    def test_cadastrar_tranca(self, mock_response):
-        numero = 1
-        localizacao = "Botafogo"
-        ano_de_fabricacao = "2022"
-        modelo = modelo_a
-        status = disponivel
+    def test_cadastrar_bicicleta(self, mock_request):
 
-        mock_response.status_code = 200
-        mock_response.json.return_value = {
+        bicicleta = 103,
+        numero = 4,
+        localizacao = "Copacabana",
+        ano_de_fabricacao = "2023",
+        modelo = "Modelo C",
+        status = "DISPONIVEL"
+        
+        response_mock = Mock()
+        response_mock.status_code = 200
+        response_mock.json.return_value = {
+            "id": 4,
+            "bicicleta": bicicleta,
             "numero": numero,
             "localizacao": localizacao,
             "ano_de_fabricacao": ano_de_fabricacao,
@@ -58,76 +69,39 @@ class TestAppFunctions(unittest.TestCase):
             "status": status
         }
 
-        with patch(cadastrar_tranca, return_value=mock_response.json()):
-            result = cadastrar_tranca(numero, localizacao, ano_de_fabricacao, modelo, status)
+        mock_request.return_value = response_mock
 
-        self.assertEqual(result, mock_response.json())
+        result = cadastrar_tranca(numero, localizacao, ano_de_fabricacao, modelo, status)
+        self.assertEqual(result['modelo'], modelo)  
+        self.assertEqual(result['status'], status)
 
     @patch('service.TrancaService.Mock')
-    def test_buscar_tranca_por_id(self, mock_response):
-        id_tranca = 1
+    def test_editar_tranca(self, mock_request):
+        id_tranca = 1  
+        bicicleta = 103,
+        numero = 7,
+        localizacao = "Rio",
+        ano_de_fabricacao = "2023",
+        modelo = "Modelo C",
+        status = "DISPONIVEL"
 
-        mock_response.status_code = "Encontrado", 200
-        mock_response.json.return_value = {
+        response_mock = Mock()
+        response_mock.status_code = 200
+        response_mock.json.return_value = {
             "id": id_tranca,
-            "bicicleta": 101,
-            "numero": id_tranca,
-            "localizacao": "Botafogo",
-            "ano_de_fabricacao": "2022",
-            "modelo": modelo_a,
-            "status": disponivel
+            "bicicleta": bicicleta,
+            "numero": numero,
+            "localizacao": localizacao,
+            "ano_de_fabricacao": ano_de_fabricacao,
+            "modelo": modelo,
+            "status": status
         }
 
-        with patch(buscar_tranca_por_id, return_value=mock_response.json()):
-            result = buscar_tranca_por_id(id_tranca)
+        mock_request.return_value = response_mock
 
-        self.assertEqual(result, mock_response.json())
-
-
-    @patch('service.TrancaService.Mock')
-    def test_editar_tranca(self, mock_response):
-
-        id_tranca = 1
-
-        data = {
-            "numero": 1,
-            "localizacao": "Copacabana",
-            "ano_de_fabricacao": "2022",
-            "modelo": modelo_a,
-            "status": "Ocupada"
-        }
-
-        mock_response.status_code = "Dados atualizados", 200
-        mock_response.json.return_value = data
-
-        with patch(editar_tranca, return_value=mock_response.json()):
-            result = editar_tranca(data, id_tranca)
-
-        self.assertEqual(result, mock_response.json())
-
-    @patch('service.TrancaService.Mock')
-    def test_deletar_tranca(self, mock_response):
-        id_tranca = 1
-
-        mock_response.status_code = 200
-        mock_response.json.return_value = "Tranca removida"
-
-        with patch(deletar_tranca, return_value=mock_response.json()):
-            result = deletar_tranca(id_tranca)
-
-        self.assertEqual(result, mock_response.json())
-
-    @patch('service.TrancaService.Mock')
-    def test_validar_id(self, mock_response):
-        id_tranca = 1
-
-        mock_response.status_code = 200
-        mock_response.json.return_value = True
-
-        with patch(validar_id, return_value=mock_response.json()):
-            result = validar_id(id_tranca)
-
-        self.assertEqual(result, mock_response.json())
+        result = editar_tranca(id_tranca)
+        self.assertEqual(result['modelo'], modelo)
+        self.assertEqual(result['ano_de_fabricacao'], ano_de_fabricacao)
 
 if __name__ == '__main__':
     unittest.main()

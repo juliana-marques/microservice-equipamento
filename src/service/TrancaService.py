@@ -120,16 +120,39 @@ def editar_tranca(data, id_tranca):
 def deletar_tranca(id_tranca):
     response_mock = Mock()
     response_mock.status_code = 200
-    response_mock.json.return_value = "Tranca removida"
+    response_mock.json.return_value = "Dados removidos"
+
     trancas = listar_trancas()
+
     for tranca in trancas:
-        if tranca['numero'] == id_tranca:
+        if tranca['id'] == id_tranca:
             trancas.remove(tranca)
             return response_mock.json()
+    
+    response_mock.status_code = 422
+    response_mock.json.return_value = [
+        {
+            "codigo": 404,
+            "mensagem": "Não encontrado"
+        }
+    ]
+
+    return response_mock.json()
         
 def validar_id(id_tranca):
     trancas = listar_trancas()
+    print(trancas)
     for tranca in trancas:
-        if tranca['numero'] == id_tranca:
+        if tranca['id'] == id_tranca:
             return True
-    return False
+        
+    response_mock = Mock()
+    response_mock.status_code = 422
+    response_mock.json.return_value = [
+        {
+            "codigo": 404,
+            "mensagem": "Não encontrado."
+        }
+    ]
+
+    return response_mock.json()

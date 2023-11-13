@@ -10,7 +10,7 @@ from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, edi
 from service.TotemService import listar_totens, cadastrar_totem, editar_totem, validar_id_totem, deletar_totem
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca
 app = Flask(__name__)
-csrf = CSRFProtect(app)
+#csrf = CSRFProtect(app)
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -24,7 +24,7 @@ def listar_bicicletas_route():
 
 @app.route('/bicicleta', methods=['POST'])
 def cadastrar_bicicleta_route():
-    data = request.get_json()
+    data = request.form
 
     marca = data.get('marca')
     modelo = data.get('modelo')
@@ -44,7 +44,7 @@ def editar_bicicleta_route(bicicleta_id):
     if verificacao != True:
         return verificacao
 
-    data = request.get_json()
+    data = request.form
 
     marca = data.get('marca')
     modelo = data.get('modelo')
@@ -108,7 +108,7 @@ def obter_trancas_route():
 
 @app.route('/tranca', methods=['POST'])
 def cadastrar_trancas_route():
-    data = request.get_json()
+    data = request.form
 
     numero = data.get('numero')
     localizacao = data.get('localizacao')
@@ -126,12 +126,14 @@ def obter_tranca_por_id_route(id_tranca):
 
 @app.route('/tranca/<int:id_tranca>', methods=['PUT'])
 def editar_tranca_rout(id_tranca):
-    data = request.get_json()
+    data = request.form
     return editar_tranca(data, id_tranca)
 
 @app.route('/tranca/<int:id_tranca>', methods=['DELETE'])
-def deletar_tranca(id_tranca):
-    return deletar_tranca(id_tranca)
+def deletar_tranca_route(id_tranca):
+
+    response = deletar_tranca(id_tranca)
+    return response
 
 if __name__ == '__main__':
     app.run(port=int(os.environ.get("PORT", 8080)),host='0.0.0.0',debug=True)
