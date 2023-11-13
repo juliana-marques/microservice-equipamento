@@ -7,9 +7,7 @@ sys.path.insert(0, project_root)
 
 from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id, deletar_bicicleta
 from service.TotemService import listar_totens, cadastrar_totem, editar_totem, validar_id_totem, deletar_totem
-from service.TrancaService import listar_trancas#, cadastrar_tranca
-
-
+from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id
 app = Flask(__name__)
 
 @app.route('/bicicleta', methods=['GET'])
