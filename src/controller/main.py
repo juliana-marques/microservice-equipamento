@@ -10,6 +10,10 @@ from service.TotemService import listar_totens, cadastrar_totem, editar_totem, v
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca
 app = Flask(__name__)
 
+@app.route('/', methods=['GET'])
+def hello_world():
+    return "Hello World! :)"
+
 @app.route('/bicicleta', methods=['GET'])
 def listar_bicicletas_route():
     bicicletas = listar_bicicletas()
