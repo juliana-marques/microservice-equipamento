@@ -7,7 +7,7 @@ sys.path.insert(0, project_root)
 
 from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id, deletar_bicicleta
 from service.TotemService import listar_totens, cadastrar_totem, editar_totem, validar_id_totem, deletar_totem
-from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca
+from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca
 app = Flask(__name__)
 
 @app.route('/bicicleta', methods=['GET'])
@@ -117,15 +117,17 @@ def cadastrar_trancas_route():
 
 @app.route('/tranca/<int:idTranca>', methods=['GET'])
 def obter_tranca_por_id_route(idTranca):
-    
     return buscar_tranca_por_id(idTranca)
 
 
 @app.route('/tranca/<int:idTranca>', methods=['PUT'])
 def editar_tranca_rout(idTranca):
     data = request.get_json()
-
     return editar_tranca(data)
+
+@app.route('/tranca/<int:idTranca>', methods=['DELETE'])
+def deletar_tranca(idTranca):
+    return deletar_tranca(idTranca)
 
 if __name__ == '__main__':
     app.run(port=int(os.environ.get("PORT", 4000)),host='0.0.0.0',debug=True)

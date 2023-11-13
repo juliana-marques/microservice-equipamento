@@ -89,12 +89,19 @@ def buscar_tranca_por_id(idTranca):
 def editar_tranca(data, idTranca):
 
     tranca = buscar_tranca_por_id(idTranca)
-    
     tranca = data
-    
     return tranca
 
-            
+def deletar_tranca(idTranca):
+    response_mock = Mock()
+    response_mock.status_code = 200
+    response_mock.json.return_value = "Tranca removida"
+    trancas = listar_trancas()
+    for tranca in trancas:
+        if tranca['numero'] == idTranca:
+            trancas.remove(tranca)
+            return response_mock.json()
+        
 def validar_id(idTranca):
     trancas = listar_trancas()
     for tranca in trancas:
