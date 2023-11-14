@@ -32,8 +32,14 @@ class TestMain(unittest.TestCase):
             "status": "teste"
         }
 
+
+        value = "None"
+        with app.test_token as teste:
+            value = client.get('/get_csrf_token')
+            print(value)
+
         with app.test_client() as client:
-            response = client.post('/bicicleta', json=data, headers={"X-CSRFToken": "IjU1ZmUzOTBiYWVlZDNhNWRiMDk3Y2FhNWJlOGIzNjk3YzU5YjA3MjMi.ZVLFNQ.Md_9XSgrRiQLZA_s1tjHEv8g0DA"})
+            response = client.post('/bicicleta', json=data, headers={"X-CSRFToken": value})
             self.assertEqual(response.status_code, mock_cadastrar_bicicletas.status_code)
 
     @patch('controller.main.Mock')
