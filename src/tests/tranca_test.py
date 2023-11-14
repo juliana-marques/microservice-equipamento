@@ -12,6 +12,7 @@ class TestTrancaService(unittest.TestCase):
 
         response_mock = Mock()
         response_mock.status_code = 200
+
         response_mock.json.return_value = [
             {
                 "id": 1,
@@ -41,24 +42,18 @@ class TestTrancaService(unittest.TestCase):
                 "status": "Disponível"
             }
         ]
-
         mock_request.return_value = response_mock
-
         result = listar_trancas()
         self.assertEqual(len(result), 3) 
+
 
     @patch('service.TrancaService.Mock')
     def test_cadastrar_bicicleta(self, mock_request):
 
-        bicicleta = 103,
-        numero = 4,
-        localizacao = "Copacabana",
-        ano_de_fabricacao = "2023",
-        modelo = "Modelo C",
-        status = "DISPONIVEL"
-        
+        bicicleta, numero, localizacao, ano_de_fabricacao, modelo, status = 103, 4, "Copacabana", "2023", "Modelo C", "DISPONIVEL"
         response_mock = Mock()
         response_mock.status_code = 200
+
         response_mock.json.return_value = {
             "id": 4,
             "bicicleta": bicicleta,
@@ -68,25 +63,19 @@ class TestTrancaService(unittest.TestCase):
             "modelo": modelo,
             "status": status
         }
-
         mock_request.return_value = response_mock
-
         result = cadastrar_tranca(numero, localizacao, ano_de_fabricacao, modelo, status)
         self.assertEqual(result['modelo'], modelo)  
         self.assertEqual(result['status'], status)
 
+
     @patch('service.TrancaService.Mock')
     def test_editar_tranca(self, mock_request):
-        id_tranca = 1  
-        bicicleta = 103,
-        numero = 7,
-        localizacao = "Rio",
-        ano_de_fabricacao = "2023",
-        modelo = "Modelo C",
-        status = "DISPONIVEL"
+        id_tranca, bicicleta, numero, localizacao, ano_de_fabricacao, modelo, status = 1, 103, 4, "Rio", "2033", "Modelo A", "EM_USO"
 
         response_mock = Mock()
         response_mock.status_code = 200
+
         response_mock.json.return_value = {
             "id": id_tranca,
             "bicicleta": bicicleta,
@@ -96,12 +85,11 @@ class TestTrancaService(unittest.TestCase):
             "modelo": modelo,
             "status": status
         }
-
         mock_request.return_value = response_mock
-
         result = editar_tranca(id_tranca, numero, localizacao, ano_de_fabricacao, modelo, status)
         self.assertEqual(result['modelo'], modelo)
         self.assertEqual(result['ano_de_fabricacao'], ano_de_fabricacao)
+
 
 if __name__ == '__main__':
     unittest.main()

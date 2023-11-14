@@ -1,12 +1,9 @@
 from unittest.mock import Mock
 
-
-
 def listar_trancas():
     response_mock = Mock()
     response_mock.status_code = 200
-    response_mock.json.return_value = [
-    {
+    response_mock.json.return_value = [{
         "id": 1,
         "bicicleta": 101,
         "numero": 1,
@@ -32,8 +29,7 @@ def listar_trancas():
         "ano_de_fabricacao": "2023",
         "modelo": "Modelo C",
         "status": "Disponível"
-    }
-    ]
+    }]
     return response_mock.json()
 
 
@@ -42,16 +38,12 @@ def cadastrar_tranca(numero, localizacao, ano_de_fabricacao, modelo, status):
     response_mock.status_code = "Dados cadastrados", 200
 
     validacao = True
-
     if validacao == False:
-
         response_mock.status_code = 422
-        response_mock.json.return_value = [
-            {
-                "codigo": 422,
-                "mensagem": "Dados inválidos"
-            }
-        ]
+        response_mock.json.return_value = [{
+            "codigo": 422,
+            "mensagem": "Dados inválidos"
+        }]
         return response_mock.json()
     
     response_mock.json.return_value = {
@@ -63,6 +55,7 @@ def cadastrar_tranca(numero, localizacao, ano_de_fabricacao, modelo, status):
     }
     return response_mock.json()
 
+
 def buscar_tranca_por_id(id_tranca):
     response_mock = Mock()
     id_exists = validar_id(id_tranca)
@@ -73,10 +66,8 @@ def buscar_tranca_por_id(id_tranca):
             "codigo": 404,
             "mensagem": "Não encontrado."
         }
-
         return response_mock.json()
         
-   
     trancas = listar_trancas()
     for tranca in trancas:
         if tranca['numero'] == id_tranca:
@@ -106,7 +97,6 @@ def editar_tranca(id_tranca, numero, localizacao, ano_de_fabricacao, modelo, sta
     tranca['ano_de_fabricacao'] = ano_de_fabricacao
     tranca['modelo'] = modelo
     tranca['status'] = status
-    
     return tranca
 
 
@@ -147,5 +137,4 @@ def validar_id(id_tranca):
             "mensagem": "Não encontrado."
         }
     ]
-
     return response_mock.json()

@@ -12,6 +12,7 @@ class TestTotemService(unittest.TestCase):
 
         response_mock = Mock()
         response_mock.status_code = 200
+
         response_mock.json.return_value = [
             {
                 "id": 1,
@@ -24,51 +25,44 @@ class TestTotemService(unittest.TestCase):
                 "descricao": "Descricao nada criativa"
             },
         ]
-        
-
         mock_request.return_value = response_mock
-
         result = listar_totens()
         self.assertEqual(len(result), 2) 
 
+
     @patch('service.TotemService.Mock')
     def test_cadastrar_totem(self, mock_request):
-        localizacao = "TesteLoc"
-        descricao = "TesteDesc"
-        
+        localizacao, descricao = "TesteLoc", "TesteDesc"
         response_mock = Mock()
         response_mock.status_code = 200
+
         response_mock.json.return_value = {
             "id": 3,
             "localizacao": localizacao,
             "descricao": descricao
         }
-
         mock_request.return_value = response_mock
-
         result = cadastrar_totem(localizacao, descricao)
         self.assertEqual(result['localizacao'], localizacao)  
         self.assertEqual(result['descricao'], descricao)
 
+
     @patch('service.TotemService.Mock')
     def test_editar_totem(self, mock_request):
-        id_totem = 1  
-        localizacao = "localizacao"
-        descricao = "descricao"
-
+        id_totem, localizacao, descricao = 1, "localizacao", "descricao" 
         response_mock = Mock()
         response_mock.status_code = 200
+
         response_mock.json.return_value = {
             "id": id_totem,
             "localizacao": localizacao,
             "descricao": descricao
         }
-
         mock_request.return_value = response_mock
-
         result = editar_totem(id, localizacao, descricao)
         self.assertEqual(result['localizacao'], localizacao)
         self.assertEqual(result['descricao'], descricao)
+
 
 if __name__ == '__main__':
     unittest.main()

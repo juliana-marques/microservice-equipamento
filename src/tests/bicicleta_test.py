@@ -30,23 +30,17 @@ class TestBicicletaService(unittest.TestCase):
                 "status": "EM_USO"
             },
         ]
-        
-
         mock_request.return_value = response_mock
-
         result = listar_bicicletas()
         self.assertEqual(len(result), 2) 
 
+
     @patch('service.BicicletaService.Mock')
     def test_cadastrar_bicicleta(self, mock_request):
-        marca = "TesteMarca"
-        modelo = "TesteModelo"
-        ano = "2023"
-        numero = 3
-        status = "DISPONIVEL"
-        
+        marca, modelo, ano, numero, status = "TesteMarca", "TesteModelo", "2023", 3, "DISPONIVEL"
         response_mock = Mock()
         response_mock.status_code = 200
+    
         response_mock.json.return_value = {
             "id": 3,
             "marca": marca,
@@ -55,24 +49,18 @@ class TestBicicletaService(unittest.TestCase):
             "numero": numero,
             "status": status
         }
-
         mock_request.return_value = response_mock
-
         result = cadastrar_bicicleta(marca, modelo, ano, numero, status)
         self.assertEqual(result['marca'], marca)  
         self.assertEqual(result['status'], status)
 
+
     @patch('service.BicicletaService.Mock')
     def test_editar_bicicleta(self, mock_request):
-        id_bicicleta = 1  
-        marca = "NovaMarca"
-        modelo = "NovoModelo"
-        ano = "2024"
-        numero = 2
-        status = "EM_USO"
-
+        id_bicicleta, marca, modelo, ano, numero, status = 1, "TesteMarca", "TesteModelo", "2023", 3, "DISPONIVEL"
         response_mock = Mock()
         response_mock.status_code = 200
+
         response_mock.json.return_value = {
             "id": id_bicicleta,
             "marca": marca,
@@ -83,18 +71,16 @@ class TestBicicletaService(unittest.TestCase):
         }
 
         mock_request.return_value = response_mock
-
         result = editar_bicicleta(id, marca, modelo, ano, numero, status)
         self.assertEqual(result['marca'], marca)
         self.assertEqual(result['ano'], ano)
+
 
     @patch('service.BicicletaService.Mock')
     def test_validar_id_bicicletas_route(self, mock_validar_id_bicicletas_route):
 
         mock_validar_id_bicicletas_route.status_code = 404
-
         response = validar_id(46)
-
         self.assertEqual(response[0]['codigo'], mock_validar_id_bicicletas_route.status_code)
 
 if __name__ == '__main__':
