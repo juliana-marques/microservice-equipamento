@@ -1,8 +1,8 @@
 import os, sys
-from flask import Flask
-from flask import request
+from flask import Flask,  request
 from unittest.mock import Mock
 from flask_wtf import CSRFProtect
+from flask_wtf.csrf import generate_csrf
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
@@ -13,8 +13,14 @@ from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranc
 
 app = Flask(__name__)
 csrf = CSRFProtect(app)
+app.config['SECRET_KEY'] = 'teste123'
 
 requests = Mock()
+
+@app.route('/get_csrf_token', methods=['GET'])
+def get_csrf_token():
+    token = generate_csrf()
+    return {'csrf_token': token}, 200
 
 @app.route('/', methods=['GET'])
 def hello_world():
