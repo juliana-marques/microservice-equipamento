@@ -12,16 +12,16 @@ from service.TotemService import listar_totens, cadastrar_totem, editar_totem, v
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca
 
 app = Flask(__name__)
-csrf = CSRFProtect(app)
-csrf.init_app(app)
-app.config['SECRET_KEY'] = 'teste123'
+#csrf = CSRFProtect(app)
+#csrf.init_app(app)
+#app.config['SECRET_KEY'] = 'teste123'
 
 requests = Mock()
 
-@app.route('/get_csrf_token', methods=['GET'])
-def get_csrf_token():
-    token = generate_csrf()
-    return {'csrf_token': token}, 200
+#@app.route('/get_csrf_token', methods=['GET'])
+#def get_csrf_token():
+#    token = generate_csrf()
+#    return {'csrf_token': token}, 200
 
 @app.route('/', methods=['GET'])
 def hello_world():
