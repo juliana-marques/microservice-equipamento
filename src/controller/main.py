@@ -102,7 +102,7 @@ def cadastrar_trancas_route():
     data = request.json
     numero, localizacao, ano_de_fabricacao, modelo, status = data.get('numero'), data.get('localizacao'), data.get('ano_de_fabricacao'), data.get('modelo'), data.get('status')
 
-    return cadastrar_tranca(numero, localizacdao, ano_de_fabricacao, modelo, status)
+    return cadastrar_tranca(numero, localizacao, ano_de_fabricacao, modelo, status)
 
 
 @app.route('/tranca/<int:id_tranca>', methods=['GET'])
