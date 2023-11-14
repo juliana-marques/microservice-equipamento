@@ -1,8 +1,8 @@
 import os, sys
 from flask import Flask,  request
 from unittest.mock import Mock
-from flask_wtf import CSRFProtect
-from flask_wtf.csrf import generate_csrf
+from flask_wtf import CSRFProtect # LIB PARA CORREÇÃO DO CSRF NO SONAR -> DOC PARA TODOS OS MICROSERVICES
+from flask_wtf.csrf import generate_csrf # LIB PARA CORREÇÃO DO CSRF NO SONAR -> DOC PARA TODOS OS MICROSERVICES
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
@@ -12,16 +12,20 @@ from service.TotemService import listar_totens, cadastrar_totem, editar_totem, v
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca
 
 app = Flask(__name__)
+requests = Mock()
+
+# config do SONAR do problema de CSRF
 csrf = CSRFProtect(app)
 csrf.init_app(app)
 app.config['SECRET_KEY'] = 'teste123'
+#####################################
 
-requests = Mock()
-
+# config do SONAR do problema de CSRF
 @app.route('/get_csrf_token', methods=['GET'])
 def get_csrf_token():
     token = generate_csrf()
-    return {'csrf_token': token}, 200
+    return token, 200
+#####################################
 
 @app.route('/', methods=['GET'])
 def hello_world():

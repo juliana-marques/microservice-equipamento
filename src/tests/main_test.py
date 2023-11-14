@@ -33,13 +33,11 @@ class TestMain(unittest.TestCase):
         }
 
 
-        value = "None"
+        token = "None"
         with app.test_client() as client:
-            value = client.get('/get_csrf_token')
-            print(value)
-
-        with app.test_client() as client:
-            response = client.post('/bicicleta', json=data, headers={"X-CSRFToken": value})
+            response = client.get('/get_csrf_token')
+            token = response.get_data(as_text=True)
+            response = client.post('/bicicleta', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=data)
             self.assertEqual(response.status_code, mock_cadastrar_bicicletas.status_code)
 
     @patch('controller.main.Mock')
@@ -56,8 +54,11 @@ class TestMain(unittest.TestCase):
             "status": "teste"
         }
 
+        token = "None"
         with app.test_client() as client:
-            response = client.put('/bicicleta/2', json=data)
+            response = client.get('/get_csrf_token')
+            token = response.get_data(as_text=True)
+            response = client.put('/bicicleta/2', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=data)
             self.assertEqual(response.status_code, mock_editar_bicicletas.status_code)
 
     @patch('controller.main.Mock')
@@ -65,8 +66,11 @@ class TestMain(unittest.TestCase):
 
         mock_deletar_bicicletas.status_code = 200
 
+        token = "None"
         with app.test_client() as client:
-            response = client.delete('/bicicleta/2')
+            response = client.get('/get_csrf_token')
+            token = response.get_data(as_text=True)
+            response = client.delete('/bicicleta/2', headers={"Content-Type": "application/json", "X-CSRFToken": token})
 
             self.assertEqual(response.status_code, mock_deletar_bicicletas.status_code)
 
@@ -91,8 +95,11 @@ class TestMain(unittest.TestCase):
             "descricao": "teste"
         }
 
+        token = "None"
         with app.test_client() as client:
-            response = client.post('/totem', json=data)
+            response = client.get('/get_csrf_token')
+            token = response.get_data(as_text=True)
+            response = client.post('/totem', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=data)
             self.assertEqual(response.status_code, mock_cadastrar_totem.status_code)
 
     @patch('controller.main.Mock')
@@ -106,8 +113,11 @@ class TestMain(unittest.TestCase):
             "descricao": "teste"
         }
 
+        token = "None"
         with app.test_client() as client:
-            response = client.put('/totem/1', json=data)
+            response = client.get('/get_csrf_token')
+            token = response.get_data(as_text=True)
+            response = client.put('/totem/1', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=data)
             self.assertEqual(response.status_code, mock_editar_totem.status_code)
 
     @patch('controller.main.Mock')
@@ -115,8 +125,11 @@ class TestMain(unittest.TestCase):
 
         mock_deletar_totem.status_code = 200
 
+        token = "None"
         with app.test_client() as client:
-            response = client.delete('/totem/1')
+            response = client.get('/get_csrf_token')
+            token = response.get_data(as_text=True)
+            response = client.delete('/totem/1', headers={"Content-Type": "application/json", "X-CSRFToken": token})
 
             self.assertEqual(response.status_code, mock_deletar_totem.status_code)
 
@@ -144,8 +157,11 @@ class TestMain(unittest.TestCase):
             "status": "teste"
         }
 
+        token = "None"
         with app.test_client() as client:
-            response = client.post('/tranca', json=data)
+            response = client.get('/get_csrf_token')
+            token = response.get_data(as_text=True)
+            response = client.post('/tranca', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=data)
             self.assertEqual(response.status_code, mock_cadastrar_tranca.status_code)
 
     @patch('controller.main.Mock')
@@ -162,8 +178,11 @@ class TestMain(unittest.TestCase):
             "status": "teste"
         }
 
+        token = "None"
         with app.test_client() as client:
-            response = client.put('/tranca/2', json=data)
+            response = client.get('/get_csrf_token')
+            token = response.get_data(as_text=True)
+            response = client.put('/tranca/2', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=data)
             self.assertEqual(response.status_code, mock_editar_tranca.status_code)
 
     @patch('controller.main.Mock')
@@ -171,8 +190,11 @@ class TestMain(unittest.TestCase):
 
         mock_deletar_tranca.status_code = 200
 
+        token = "None"
         with app.test_client() as client:
-            response = client.delete('/tranca/2')
+            response = client.get('/get_csrf_token')
+            token = response.get_data(as_text=True)
+            response = client.delete('/tranca/2', headers={"Content-Type": "application/json", "X-CSRFToken": token})
 
             self.assertEqual(response.status_code, mock_deletar_tranca.status_code)
 
