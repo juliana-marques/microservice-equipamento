@@ -2,10 +2,10 @@ name: Deploy to Cloud Run
 
 on:
  push:
-    #tags:
-    branches:
-      #- v*
-      - main
+    tags:
+    #branches:
+      - v*
+    #  - main
 
 jobs:
 
@@ -56,5 +56,3 @@ jobs:
           --image gcr.io/bike-rent-403120/bike-rent:$GITHUB_SHA \
           --platform managed \
           --region us-central1
-
-# version 1.0
