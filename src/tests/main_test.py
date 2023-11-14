@@ -34,7 +34,7 @@ class TestMain(unittest.TestCase):
 
 
         value = "None"
-        with app.test_token as teste:
+        with app.test_client() as client:
             value = client.get('/get_csrf_token')
             print(value)
 
