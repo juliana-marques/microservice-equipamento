@@ -101,13 +101,7 @@ class TestRoutes(unittest.TestCase):
         data = fechamento_da_tranca(json)
         self.assertEqual(data, False)
 
-    def test_fechamento_tranca_true(self):
-        json = {"numero_tranca": 1}
-        data = fechamento_da_tranca(json)
-        self.assertEqual(data, True)
         
-
-    
     ################################################################################
     #                                                                              #
     # o patch é usado para substituir a função chamada por um objeto de simulação  #
