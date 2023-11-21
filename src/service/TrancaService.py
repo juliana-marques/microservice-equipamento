@@ -17,7 +17,6 @@ def editar_tranca(id_tranca, tranca):
 
     for t in trancas:
         if t['id'] == id_tranca:
-            print(tranca)
             tranca['id'] = id_tranca
             repository().deletar_tranca(id_tranca)
             repository().adicionar_tranca(tranca)
@@ -26,10 +25,34 @@ def editar_tranca(id_tranca, tranca):
 def deletar_tranca(id_tranca):
     return repository().deletar_tranca(id_tranca)
 
-
 def listar_tranca_id(tranca_id):
     trancas = repository().listar_trancas()
     for t in trancas:
         if t['id'] == tranca_id:
             return t
     return "Não encontrado"
+
+def integrar_tranca_rede(numero_tranca):
+    trancas = repository().listar_trancas()
+    
+    for tranca in trancas:
+        if numero_tranca['numero'] == tranca['numero']:
+            if tranca['status'] == "NOVA" or tranca['status'] == "EM_REPARO":
+                tranca['status'] = "DISPONIVEL"
+                tranca = editar_tranca(tranca['id'], tranca)
+                # enviar email
+                # se em reparo -> conferir funcionário
+                # inserir data e hora na inserção do totem, matricula do reparador e o numero da tranca
+                return True
+    return False
+
+def retirar_tranca_rede(numero_tranca):
+    trancas = listar_trancas
+    
+    for tranca in trancas:
+        if numero_tranca == tranca['numero']:
+            if tranca['status'] == "NOVA" or tranca['status'] == "EM_REPARO":
+                tranca['status'] = "DISPONIVEL"
+                tranca = editar_tranca(tranca['id'], tranca)
+                return True
+    return False

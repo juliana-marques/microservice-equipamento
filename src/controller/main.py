@@ -10,7 +10,7 @@ sys.path.insert(0, project_root)
 
 from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta, listar_bicicleta_id
 from service.TotemService import listar_totens, cadastrar_totem, editar_totem, deletar_totem, listar_totem_id
-from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id
+from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id, integrar_tranca_rede, retirar_tranca_rede
 
 ###### config do SONAR do problema de CSRF ###### 
 from flask_wtf import CSRFProtect               #
@@ -162,12 +162,39 @@ def deletar_tranca_route(id_tranca):
     response_mock = Mock()
     if isDelete == True:
         response_mock.status_code = 200
-        response_mock.json.return_value = "Dados removidos"
+        response_mock.json.return_value = "Dados removidos", 200
     
     if isDelete == False:
         response_mock.status_code = 404
-        response_mock.json.return_value = "Dados não encontrados"
+        response_mock.json.return_value = "Dados não encontrados", 404
 
+    return response_mock.json()
+
+
+@app.route('/tranca/integrarNaRede', methods=['POST'])
+def integrar_tranca_rede_route():
+    numero_tranca = request.json
+    validar_tranca = integrar_tranca_rede(numero_tranca)
+
+    response_mock = Mock()
+    if validar_tranca:
+        response_mock.json.return_value = "Dados cadastrados", 200
+        return response_mock.json()
+    response_mock.json.return_value = "Dados inválidos", 422
+    return response_mock.json()
+
+@app.route('/tranca/retirarDaRede', methods=['POST'])
+def retirar_tranca_rede():
+    numero_tranca = request.json
+    validar_tranca = retirar_tranca_rede(numero_tranca)
+
+    response_mock = Mock()
+    if validar_tranca:
+        response_mock.status_code = 200
+        response_mock.json.return_value = "Dados cadastrados"
+        return response_mock.json()
+    response_mock.status_code = 422
+    response_mock.json.return_value = "Dados inválidos"
     return response_mock.json()
 
 
