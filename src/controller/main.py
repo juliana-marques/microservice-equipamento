@@ -33,6 +33,9 @@ dados_removidos = "Dados removidos"
 dados_nao_encontrados = "Dados não encontrados"
 dados_invalidos = "Dados inválidos"
 
+@app.route('/')
+def index():
+    return 'Hello, World!'
 
 @app.route('/bicicleta', methods=['GET'])
 def listar_bicicletas_route():

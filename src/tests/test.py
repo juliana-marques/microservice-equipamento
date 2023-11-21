@@ -17,6 +17,11 @@ class TestRoutes(unittest.TestCase):
     def setUp(self):
         self.app = app
         self.client = self.app.test_client()
+
+
+    def test_app_run_configuration(self):
+        response = self.client.get('/')
+        self.assertEqual(response.text, "Hello, World!")
     
 
     def test_listar_bicicletas_route(self):
