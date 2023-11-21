@@ -25,3 +25,11 @@ def editar_tranca(id_tranca, tranca):
 
 def deletar_tranca(id_tranca):
     return repository().deletar_tranca(id_tranca)
+
+
+def listar_tranca_id(tranca_id):
+    trancas = repository().listar_trancas()
+    for t in trancas:
+        if t['id'] == tranca_id:
+            return t
+    return "Não encontrado"

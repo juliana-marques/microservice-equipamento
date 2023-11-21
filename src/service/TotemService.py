@@ -29,3 +29,10 @@ def editar_totem(id_totem, totem):
 
 def deletar_totem(id_totem):
     return repository().deletar_totem(id_totem)
+
+def listar_totem_id(totem_id):
+    totens = repository().listar_totens()
+    for t in totens:
+        if t['id'] == totem_id:
+            return t
+    return "Não encontrado"

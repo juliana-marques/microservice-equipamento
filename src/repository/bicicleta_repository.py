@@ -19,7 +19,6 @@ class BicletaRepository:
             id_bicicleta_global += 1
             bicicleta['id'] = id_bicicleta_global
             self.bicicletas.append(bicicleta)
-        return self.bicicletas
     
 
     def listar_bicicleta(self):

@@ -8,9 +8,9 @@ requests = Mock()
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))                    
 sys.path.insert(0, project_root)                                                                 
 
-from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta
-from service.TotemService import listar_totens, cadastrar_totem, editar_totem, deletar_totem
-from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca
+from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta, listar_bicicleta_id
+from service.TotemService import listar_totens, cadastrar_totem, editar_totem, deletar_totem, listar_totem_id
+from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id
 
 ###### config do SONAR do problema de CSRF ###### 
 from flask_wtf import CSRFProtect               #
@@ -36,6 +36,11 @@ def hello_world():
 @app.route('/bicicleta', methods=['GET'])
 def listar_bicicletas_route():
     return listar_bicicletas()
+
+
+@app.route('/bicicleta/<int:bicicleta_id>', methods=['GET'])
+def listar_bicicleta_id_route(bicicleta_id):
+    return listar_bicicleta_id(bicicleta_id)
 
 
 @app.route('/bicicleta', methods=['POST'])
@@ -75,6 +80,10 @@ def deletar_bicicleta_route(bicicleta_id):
 @app.route('/totem', methods=['GET'])
 def listar_totens_route():
     return listar_totens()
+
+@app.route('/totem/<int:totem_id>', methods=['GET'])
+def listar_totem_id_route(totem_id):
+    return listar_totem_id(totem_id)
 
 
 @app.route('/totem', methods=['POST'])
@@ -118,6 +127,11 @@ def deletar_totem_route(id_totem):
 @app.route('/tranca', methods=['GET'])
 def obter_trancas_route():
     return listar_trancas()
+
+
+@app.route('/tranca/<int:tranca_id>', methods=['GET'])
+def listar_tranca_id_route(tranca_id):
+    return listar_tranca_id(tranca_id)
 
 
 @app.route('/tranca', methods=['POST'])
