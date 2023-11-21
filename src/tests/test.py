@@ -90,5 +90,44 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(response.json, dados_cadastrados)
 
 
+    @patch('service.BicicletaService.editar_bicicleta')
+    def test_editar_bicicleta_route(self, mock_editar_bicicleta):
+        dados_editados = {"id": "1", "marca": "marca_teste", "modelo": "modelo_teste", "ano": "2023", "numero": 1, "status": "DISPONIVEL"}
+        mock_editar_bicicleta.return_value = dados_editados
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.put('/bicicleta/1', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_editados)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, dados_editados)
+
+
+    @patch('service.TotemService.editar_totem')
+    def test_editar_totem_route(self, mock_editar_totem):
+        dados_editados = {"id": "1", "localizacao": "localizacao_teste", "modelo": "descricao_teste"}
+        mock_editar_totem.return_value = dados_editados
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.put('/totem/1', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_editados)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, dados_editados)
+    
+
+    @patch('service.TrancaService.editar_tranca')
+    def test_editar_tranca_route(self, mock_editar_tranca):
+        dados_editados = {"id": "1", "numero": 1, "localizacao": "localizacao_teste", "ano_de_fabricacao": "2023", "modelo": "modelo_teste", "status": "DISPONIVEL"}
+        mock_editar_tranca.return_value = dados_editados
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.put('/tranca/1', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_editados)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, dados_editados)
+
+
 if __name__ == '__main__':
     unittest.main()
