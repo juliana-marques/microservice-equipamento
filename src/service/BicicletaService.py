@@ -20,11 +20,10 @@ def editar_bicicleta(id, bicicleta):
     bicicletas = repository().listar_bicicleta()
     
     for b in bicicletas:
-        print(b)
         if b['id'] == id:
-            b = bicicleta
+            bicicleta['id'] = id
             repository().deletar_bicicleta(id)
-            repository().adicionar_bicicleta(b)
+            repository().adicionar_bicicleta(bicicleta)
     return bicicleta
     
 

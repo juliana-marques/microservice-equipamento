@@ -11,7 +11,6 @@ sys.path.insert(0, project_root)
 from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id, deletar_bicicleta
 from service.TotemService import listar_totens, cadastrar_totem, editar_totem, validar_id_totem, deletar_totem
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca, obter_bicicleta_tranca
-from model.bicicleta import Bicicleta
 
 ###### config do SONAR do problema de CSRF ###### 
 from flask_wtf import CSRFProtect               #
