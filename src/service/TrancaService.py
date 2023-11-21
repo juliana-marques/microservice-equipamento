@@ -51,7 +51,7 @@ def retirar_tranca_rede(data):
 
     if data['status_acao_reparador'] == "REPARO":
         for tranca in trancas:
-            if data['numero'] == tranca['numero']:
+            if data['numero'] == tranca['numero'] and not tranca['status'] == "DESTRANCAR":
                 tranca['status'] = "EM_REPARO"
                 tranca = editar_tranca(tranca['id'], tranca)
                 # envia email / registra data  e hota, numero e o reparador

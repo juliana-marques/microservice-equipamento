@@ -41,7 +41,7 @@ def listar_bicicleta_id(bicicleta_id):
 def integrar_bicicleta_rede(data):
     bicicletas = BicletaRepository().listar_bicicleta()
     for b in bicicletas:
-        if b['numero'] == data:
+        if b['numero'] == data and (b['status'] == "NOVA" or b['status'] == "EM_REPARO"):
             b['status'] = "DISPONIVEL"
             editar_bicicleta(b['id'], b)
             return True
@@ -52,7 +52,7 @@ def retirar_bicicleta_rede(data):
 
     if data['status_acao_reparador'] == "REPARO":
         for bicicleta in bicicletas:
-            if data['numero_bicicleta'] == bicicleta['numero']:
+            if data['numero_bicicleta'] == bicicleta['numero'] and bicicleta['status'] == "REPARO_SOLICITADO":
                 bicicleta['status'] = "EM_REPARO"
                 editar_bicicleta(bicicleta['id'], bicicleta)
                 # envia email / registra data  e hota, numero e o reparador
@@ -60,7 +60,7 @@ def retirar_bicicleta_rede(data):
             
     elif data['status_acao_reparador'] == "APOSENTADORIA":
         for bicicleta in bicicletas:
-            if data['numero_bicicleta'] == bicicleta['numero']:
+            if data['numero_bicicleta'] == bicicleta['numero'] and bicicleta['status'] == "REPARO_SOLICITADO":
                 bicicleta['status'] = "APOSENTADA"
                 editar_bicicleta(bicicleta['id'], bicicleta)
                 # envia email / registra data  e hota, numero e o reparador
