@@ -129,5 +129,49 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(response.json, dados_editados)
 
 
+    @patch('service.TrancaService.deletar_tranca')
+    def test_deletar_tranca_invalido_route(self, mock_deletar_tranca):
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+
+        response = self.client.delete('/tranca/1', headers={"Content-Type": "application/json", "X-CSRFToken": token})
+
+        mock_deletar_tranca.return_value = "Dados não encontrados"
+
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.text, mock_deletar_tranca.return_value)
+
+
+    @patch('service.BicicletaService.deletar_bicicleta')
+    def test_deletar_bicicleta_invalido_route(self, mock_deletar_bicicleta):
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+
+        response = self.client.delete('/bicicleta/1', headers={"Content-Type": "application/json", "X-CSRFToken": token})
+
+        mock_deletar_bicicleta.return_value = "Dados não encontrados"
+
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.text, mock_deletar_bicicleta.return_value)
+
+
+    @patch('service.TotemService.deletar_totem')
+    def test_deletar_totem_invalido_route(self, mock_deletar_totem):
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+
+        response = self.client.delete('/bicicleta/1', headers={"Content-Type": "application/json", "X-CSRFToken": token})
+
+        mock_deletar_totem.return_value = "Dados não encontrados"
+
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.text, mock_deletar_totem.return_value)
+
 if __name__ == '__main__':
     unittest.main()
