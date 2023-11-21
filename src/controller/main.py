@@ -28,6 +28,10 @@ def get_csrf_token():                           #
 
 bicicletas = []
 dados_cadastrados = "Dados cadastrados"
+dados_atualizados = "Dados atualizados"
+dados_removidos = "Dados removidos"
+dados_nao_encontrados = "Dados não encontrados"
+dados_invalidos = "Dados inválidos"
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -66,15 +70,15 @@ def editar_bicicleta_route(bicicleta_id):
 
 @app.route('/bicicleta/<int:bicicleta_id>', methods=['DELETE'])
 def deletar_bicicleta_route(bicicleta_id):
-    isDelete = deletar_bicicleta(bicicleta_id)
+    is_delete = deletar_bicicleta(bicicleta_id)
     response_mock = Mock()
-    if isDelete == True:
+    if is_delete == True:
         response_mock.status_code = 200
-        response_mock.json.return_value = "Dados removidos", 200
+        response_mock.json.return_value = dados_removidos, 200
     
-    if isDelete == False:
+    if is_delete == False:
         response_mock.status_code = 404
-        response_mock.json.return_value = "Dados não encontrados", 404
+        response_mock.json.return_value = dados_nao_encontrados, 404
 
     return response_mock.json()
 
@@ -88,7 +92,7 @@ def bicicleta_integrar_rede_route():
     validacao_bicicleta = integrar_bicicleta_rede(data['bicicleta_numero'])
 
     if not validacao_tranca or not validacao_bicicleta:
-        response_mock.json.return_value = "Dados inválidos", 422
+        response_mock.json.return_value = dados_invalidos, 422
         return response_mock.json()
 
     fechamento_da_tranca(data['tranca_id']) # enviar email
@@ -107,7 +111,7 @@ def retirar_bicicleta_rede_route():
     if validar_bicicleta and validar_tranca:
         response_mock.json.return_value = dados_cadastrados, 200
         return response_mock.json()
-    response_mock.json.return_value = "Dados inválidos", 422
+    response_mock.json.return_value = dados_invalidos, 422
     return response_mock.json()
 
 
@@ -137,22 +141,22 @@ def editar_totem_route(id_totem):
     totem = request.json
     response_mock = Mock()
 
-    response_mock.status_code = "Dados atualizados", 200
+    response_mock.status_code = dados_atualizados, 200
     response_mock.json.return_value =  editar_totem(id_totem, totem), 200
     return response_mock.json()
 
 
 @app.route('/totem/<int:id_totem>', methods=['DELETE'])
 def deletar_totem_route(id_totem):
-    isDelete = deletar_totem(id_totem)
+    is_delete = deletar_totem(id_totem)
     response_mock = Mock()
-    if isDelete == True:
+    if is_delete == True:
         response_mock.status_code = 200
-        response_mock.json.return_value = "Dados removidos", 200
+        response_mock.json.return_value = dados_removidos, 200
     
-    if isDelete == False:
+    if is_delete == False:
         response_mock.status_code = 404
-        response_mock.json.return_value = "Dados não encontrados", 404
+        response_mock.json.return_value = dados_nao_encontrados, 404
 
     return response_mock.json()
 
@@ -185,22 +189,22 @@ def editar_tranca_route(id_tranca):
     tranca = request.json
     response_mock = Mock()
 
-    response_mock.status_code = "Dados atualizados", 200
+    response_mock.status_code = dados_atualizados, 200
     response_mock.json.return_value =  editar_tranca(id_tranca, tranca), 200
     return response_mock.json()
 
 
 @app.route('/tranca/<int:id_tranca>', methods=['DELETE'])
 def deletar_tranca_route(id_tranca):
-    isDelete = deletar_tranca(id_tranca)
+    is_delete = deletar_tranca(id_tranca)
     response_mock = Mock()
-    if isDelete == True:
+    if is_delete == True:
         response_mock.status_code = 200
-        response_mock.json.return_value = "Dados removidos", 200
+        response_mock.json.return_value = dados_removidos, 200
     
-    if isDelete == False:
+    if is_delete == False:
         response_mock.status_code = 404
-        response_mock.json.return_value = "Dados não encontrados", 404
+        response_mock.json.return_value = dados_nao_encontrados, 404
 
     return response_mock.json()
 
@@ -214,7 +218,7 @@ def integrar_tranca_rede_route():
     if validar_tranca:
         response_mock.json.return_value = dados_cadastrados, 200
         return response_mock.json()
-    response_mock.json.return_value = "Dados inválidos", 422
+    response_mock.json.return_value = dados_invalidos, 422
     return response_mock.json()
 
 
@@ -227,7 +231,7 @@ def retirar_tranca_rede_route():
     if validar_tranca:
         response_mock.json.return_value = dados_cadastrados, 200
         return response_mock.json()
-    response_mock.json.return_value = "Dados inválidos", 422
+    response_mock.json.return_value = dados_invalidos, 422
     return response_mock.json()
 
 
