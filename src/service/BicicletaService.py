@@ -66,3 +66,27 @@ def retirar_bicicleta_rede(data):
                 # envia email / registra data  e hota, numero e o reparador
                 return True
     return False
+
+def enum_status(acao):
+    if acao == 1:
+        return "DISPONIVEL"
+    elif acao == 2:
+        return "EM_USO"
+    elif acao == 3:
+        return "NOVA"
+    elif acao == 4:
+        return "APOSENTADA"
+    elif acao == 5:
+        return "REPARO SOLICITADO"
+    elif acao == 6:
+        return "EM_REPARO"
+
+def status_bicicleta(bicicleta_id, acao):
+    bicicletas = BicletaRepository().listar_bicicleta()
+    for b in bicicletas:
+        if b['id'] == bicicleta_id:
+            status = enum_status(acao)
+            b['status'] = status
+            editar_bicicleta(b['id'], b)
+            return True
+    return False

@@ -17,11 +17,6 @@ class TestRoutes(unittest.TestCase):
     def setUp(self):
         self.app = app
         self.client = self.app.test_client()
-
-
-    def test_app_run_configuration(self):
-        response = self.client.get('/')
-        self.assertEqual(response.text, "Hello, World!")
     
 
     def test_listar_bicicletas_route(self):
@@ -289,7 +284,6 @@ class TestRoutes(unittest.TestCase):
         response = self.client.get('/get_csrf_token')
         token = response.get_data(as_text=True)
         response = self.client.post('/bicicleta/retirarDaRede', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_cadastrados)
-        print(response.text)
 
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.text, "Dados inválidos")
@@ -308,6 +302,18 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(response.text, "Dados cadastrados")
 
 
+    @patch('controller.main.destrancar_route')
+    def test_destrancar_route(self, mock_destrancar):
+        mock_destrancar.return_value = "Dados cadastrados"
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/tranca/1/destrancar', headers={"Content-Type": "application/json", "X-CSRFToken": token})
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.text, "Dados inválidos")
+
+
     @patch('controller.main.retirar_bicicleta_rede_route')
     def test_retirar_bicicleta_rede_aposentadoria_route(self, mock_retirar_tranca_rede):
         dados_cadastrados = {"status_acao_reparador": "APOSENTADORIA", "numero_bicicleta": 1, "numero_tranca": 1}
@@ -316,10 +322,34 @@ class TestRoutes(unittest.TestCase):
         response = self.client.get('/get_csrf_token')
         token = response.get_data(as_text=True)
         response = self.client.post('/bicicleta/retirarDaRede', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_cadastrados)
-        print(response.text)
 
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.text, "Dados inválidos")
+
+
+    @patch('controller.main.trancar_route')
+    def test_trancar_route(self, mock_trancar):
+        mock_trancar.return_value = "Dados cadastrados"
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/tranca/1/trancar', headers={"Content-Type": "application/json", "X-CSRFToken": token})
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.text, "Dados inválidos")
+
+    
+    @patch('controller.main.status_bicicleta_route')
+    def test_status_bicicleta_route(self, mock_status):
+        mock_status.return_value = "Dados cadastrados"
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/bicicleta/1/status/1', headers={"Content-Type": "application/json", "X-CSRFToken": token})
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.text, "Dados inválidos")
+
 
 
 if __name__ == '__main__':

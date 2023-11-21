@@ -90,3 +90,21 @@ def validar_tranca_retirar_bicicleta(data):
             tranca = editar_tranca(tranca['id'], tranca)
             return True
     return False
+
+def trancar(id_tranca):
+    trancas = repository().listar_trancas()
+    for tranca in trancas:
+        if id_tranca == tranca['id']:
+            tranca['status'] = "TRANCAR"
+            tranca = editar_tranca(tranca['id'], tranca)
+            return True
+        return False
+
+def destrancar(id_tranca):
+    trancas = repository().listar_trancas()
+    for tranca in trancas:
+        if id_tranca == tranca['id']:
+            tranca['status'] = "DESTRANCAR"
+            tranca = editar_tranca(tranca['id'], tranca)
+            return True
+        return False

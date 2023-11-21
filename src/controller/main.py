@@ -8,9 +8,9 @@ requests = Mock()
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))                    
 sys.path.insert(0, project_root)                                                                 
 
-from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta, listar_bicicleta_id, integrar_bicicleta_rede, retirar_bicicleta_rede
+from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta, listar_bicicleta_id, integrar_bicicleta_rede, retirar_bicicleta_rede, status_bicicleta
 from service.TotemService import listar_totens, cadastrar_totem, editar_totem, deletar_totem, listar_totem_id
-from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id, integrar_tranca_rede, retirar_tranca_rede, validar_tranca_integrar_bicicleta, fechamento_da_tranca, validar_tranca_retirar_bicicleta
+from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id, integrar_tranca_rede, retirar_tranca_rede, validar_tranca_integrar_bicicleta, fechamento_da_tranca, validar_tranca_retirar_bicicleta, trancar, destrancar
 
 ###### config do SONAR do problema de CSRF ###### 
 from flask_wtf import CSRFProtect               #
@@ -97,6 +97,18 @@ def bicicleta_integrar_rede_route():
     fechamento_da_tranca(data['tranca_id']) # enviar email
 
     response_mock.json.return_value = dados_cadastrados, 200
+    return response_mock.json()
+
+
+@app.route('/bicicleta/<int:bicicleta_id>/status/<int:acao>', methods=['POST'])
+def status_bicicleta_route(bicicleta_id, acao): 
+    validar_bicicleta = status_bicicleta(bicicleta_id, acao)
+
+    response_mock = Mock()
+    if validar_bicicleta:
+        response_mock.json.return_value = dados_cadastrados, 200
+        return response_mock.json()
+    response_mock.json.return_value = dados_invalidos, 422
     return response_mock.json()
 
 
@@ -233,6 +245,29 @@ def retirar_tranca_rede_route():
     response_mock.json.return_value = dados_invalidos, 422
     return response_mock.json()
 
+
+@app.route('/tranca/<int:id_tranca>/trancar', methods=['POST'])
+def trancar_route(id_tranca):
+    validar_tranca = trancar(id_tranca)
+
+    response_mock = Mock()
+    if validar_tranca:
+        response_mock.json.return_value = dados_cadastrados, 200
+        return response_mock.json()
+    response_mock.json.return_value = dados_invalidos, 422
+    return response_mock.json()
+
+
+@app.route('/tranca/<int:id_tranca>/destrancar', methods=['POST'])
+def destrancar_route(id_tranca):
+    validar_tranca = destrancar(id_tranca)
+
+    response_mock = Mock()
+    if validar_tranca:
+        response_mock.json.return_value = dados_cadastrados, 200
+        return response_mock.json()
+    response_mock.json.return_value = dados_invalidos, 422
+    return response_mock.json()
 
 if __name__ == '__main__':
     app.run(port=int(os.environ.get("PORT", 8080)),host='0.0.0.0',debug=True)
