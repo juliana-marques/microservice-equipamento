@@ -77,7 +77,7 @@ def enum_status(acao):
     elif acao == 4:
         return "APOSENTADA"
     elif acao == 5:
-        return "REPARO SOLICITADO"
+        return "REPARO_SOLICITADO"
     elif acao == 6:
         return "EM_REPARO"
 
