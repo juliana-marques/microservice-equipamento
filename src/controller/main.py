@@ -50,7 +50,7 @@ def cadastrar_bicicleta_route():
     cadastrar_bicicleta(bicicleta)
     response_mock = Mock()
     response_mock.status_code = "Dados cadastrados", 200
-    response_mock.json.return_value = request.json
+    response_mock.json.return_value = request.json, 200
     return response_mock.json()
 
 @app.route('/bicicleta/<int:bicicleta_id>', methods=['PUT'])
@@ -60,7 +60,7 @@ def editar_bicicleta_route(bicicleta_id):
     bike_new = editar_bicicleta(bicicleta_id, bicicleta)
     response_mock = Mock()
     response_mock.status_code = "Dados atualizados", 200
-    response_mock.json.return_value = bike_new
+    response_mock.json.return_value = bike_new, 200
     return bike_new
 
 @app.route('/bicicleta/<int:bicicleta_id>', methods=['DELETE'])
@@ -69,11 +69,11 @@ def deletar_bicicleta_route(bicicleta_id):
     response_mock = Mock()
     if isDelete == True:
         response_mock.status_code = 200
-        response_mock.json.return_value = "Dados removidos"
+        response_mock.json.return_value = "Dados removidos", 200
     
     if isDelete == False:
         response_mock.status_code = 404
-        response_mock.json.return_value = "Dados não encontrados"
+        response_mock.json.return_value = "Dados não encontrados", 404
 
     return response_mock.json()
 
@@ -93,7 +93,7 @@ def cadastrar_totem_route():
 
     response_mock = Mock()
     response_mock.status_code = "Dados cadastrados", 200
-    response_mock.json.return_value = request.json
+    response_mock.json.return_value = request.json, 200
     return response_mock.json()
 
 
@@ -104,7 +104,7 @@ def editar_totem_route(id_totem):
     response_mock = Mock()
 
     response_mock.status_code = "Dados atualizados", 200
-    response_mock.json.return_value =  editar_totem(id_totem, totem)
+    response_mock.json.return_value =  editar_totem(id_totem, totem), 200
     return response_mock.json()
 
 
@@ -114,11 +114,11 @@ def deletar_totem_route(id_totem):
     response_mock = Mock()
     if isDelete == True:
         response_mock.status_code = 200
-        response_mock.json.return_value = "Dados removidos"
+        response_mock.json.return_value = "Dados removidos", 200
     
     if isDelete == False:
         response_mock.status_code = 404
-        response_mock.json.return_value = "Dados não encontrados"
+        response_mock.json.return_value = "Dados não encontrados", 404
 
     return response_mock.json()
 
@@ -141,7 +141,7 @@ def cadastrar_tranca_route():
 
     response_mock = Mock()
     response_mock.status_code = "Dados cadastrados", 200
-    response_mock.json.return_value = request.json
+    response_mock.json.return_value = request.json, 200
     return response_mock.json()
 
 
@@ -152,7 +152,7 @@ def editar_tranca_route(id_tranca):
     response_mock = Mock()
 
     response_mock.status_code = "Dados atualizados", 200
-    response_mock.json.return_value =  editar_tranca(id_tranca, tranca)
+    response_mock.json.return_value =  editar_tranca(id_tranca, tranca), 200
     return response_mock.json()
 
 
@@ -183,18 +183,17 @@ def integrar_tranca_rede_route():
     response_mock.json.return_value = "Dados inválidos", 422
     return response_mock.json()
 
+
 @app.route('/tranca/retirarDaRede', methods=['POST'])
-def retirar_tranca_rede():
-    numero_tranca = request.json
-    validar_tranca = retirar_tranca_rede(numero_tranca)
+def retirar_tranca_rede_route():
+    data = request.json
+    validar_tranca = retirar_tranca_rede(data)
 
     response_mock = Mock()
     if validar_tranca:
-        response_mock.status_code = 200
-        response_mock.json.return_value = "Dados cadastrados"
+        response_mock.json.return_value = "Dados cadastrados", 200
         return response_mock.json()
-    response_mock.status_code = 422
-    response_mock.json.return_value = "Dados inválidos"
+    response_mock.json.return_value = "Dados inválidos", 422
     return response_mock.json()
 
 

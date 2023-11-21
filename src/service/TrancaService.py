@@ -46,13 +46,22 @@ def integrar_tranca_rede(numero_tranca):
                 return True
     return False
 
-def retirar_tranca_rede(numero_tranca):
-    trancas = listar_trancas
-    
-    for tranca in trancas:
-        if numero_tranca == tranca['numero']:
-            if tranca['status'] == "NOVA" or tranca['status'] == "EM_REPARO":
-                tranca['status'] = "DISPONIVEL"
+def retirar_tranca_rede(data):
+    trancas = repository().listar_trancas()
+
+    if data['opcao'] == "REPARO":
+        for tranca in trancas:
+            if data['numero'] == tranca['numero']:
+                tranca['status'] = "EM_REPARO"
                 tranca = editar_tranca(tranca['id'], tranca)
+                # envia email / registra data  e hota, numero e o reparador
+                return True
+            
+    elif data['opcao'] == "APOSENTADORIA":
+        for tranca in trancas:
+            if data['numero'] == tranca['numero']:
+                tranca['status'] = "APOSENTADA"
+                tranca = editar_tranca(tranca['id'], tranca)
+                # envia email / registra data  e hota, numero e o reparador
                 return True
     return False
