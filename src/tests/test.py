@@ -72,9 +72,29 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(data, trancas_esperados)
 
     
-    def test_enum_status(self):
+    def test_enum_status_disponivel(self):
         data = enum_status(1)
         self.assertEqual(data, "DISPONIVEL")
+
+    def test_enum_status_uso_uso(self):
+        data = enum_status(1)
+        self.assertEqual(data, "EM_USO")
+
+    def test_enum_status_nova(self):
+        data = enum_status(1)
+        self.assertEqual(data, "NOVA")
+
+    def test_enum_status_aposentada(self):
+        data = enum_status(1)
+        self.assertEqual(data, "APOSENTADA")
+
+    def test_enum_status_rep_solicitado(self):
+        data = enum_status(1)
+        self.assertEqual(data, "REPARO_SOLICITADO")
+
+    def test_enum_status_reparo(self):
+        data = enum_status(1)
+        self.assertEqual(data, "EM_REPARO")
 
     
     ################################################################################
