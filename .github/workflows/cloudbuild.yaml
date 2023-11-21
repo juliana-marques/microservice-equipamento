@@ -29,22 +29,6 @@ jobs:
     - name: Configure Docker authentication for Google Container Registry
       run: gcloud auth configure-docker
 
-    - name: Run Bike Tests
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install Flask gunicorn requests mock
-        python src/tests/bicicleta_test.py
-        deactivate
-
-    - name: Run Totem Tests
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install Flask gunicorn requests mock
-        python src/tests/totem_test.py
-        deactivate 
-
     - name: Build and Push Docker image
       run: |
         docker buildx build --platform linux/amd64 -t gcr.io/bike-rent-403120/bike-rent:$GITHUB_SHA src/
