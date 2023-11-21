@@ -1,4 +1,5 @@
 from unittest.mock import Mock
+  
 
 def listar_trancas():
     response_mock = Mock()

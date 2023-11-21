@@ -8,13 +8,10 @@ requests = Mock()
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))                    
 sys.path.insert(0, project_root)                                                                 
 
-from model.bicicleta import Bicicleta
-from model.totem import Totem
-from model.tranca import Tranca
 from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id, deletar_bicicleta
 from service.TotemService import listar_totens, cadastrar_totem, editar_totem, validar_id_totem, deletar_totem
 from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca, obter_bicicleta_tranca
-
+from model.bicicleta import Bicicleta
 
 ###### config do SONAR do problema de CSRF ###### 
 from flask_wtf import CSRFProtect               #
@@ -30,6 +27,8 @@ def get_csrf_token():                           #
     return token, 200                           #
 #################################################
 
+bicicletas = []
+
 @app.route('/', methods=['GET'])
 def hello_world():
     return "Hello World! :)"
@@ -37,12 +36,12 @@ def hello_world():
 
 @app.route('/bicicleta', methods=['GET'])
 def listar_bicicletas_route():
-    return listar_bicicletas().json()
+    return listar_bicicletas()
 
 
 @app.route('/bicicleta', methods=['POST'])
 def cadastrar_bicicleta_route():
-    data = request.json
+    bicicleta = request.json
     
     cadastrar_bicicleta(bicicleta)
     response_mock = Mock()
@@ -52,9 +51,8 @@ def cadastrar_bicicleta_route():
 
 @app.route('/bicicleta/<int:bicicleta_id>', methods=['PUT'])
 def editar_bicicleta_route(bicicleta_id):
-    data = request.json
+    bicicleta = request.json
 
-    bicicleta = Bicicleta(data.get('marca'), data.get('modelo'), data.get('ano'), data.get('numero'), data.get('status'))
     bike_new = editar_bicicleta(bicicleta_id, bicicleta)
     response_mock = Mock()
     response_mock.status_code = "Dados atualizados", 200
