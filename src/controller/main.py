@@ -27,6 +27,7 @@ def get_csrf_token():                           #
 #################################################
 
 bicicletas = []
+dados_cadastrados = "Dados cadastrados"
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -49,7 +50,7 @@ def cadastrar_bicicleta_route():
     
     cadastrar_bicicleta(bicicleta)
     response_mock = Mock()
-    response_mock.status_code = "Dados cadastrados", 200
+    response_mock.status_code = dados_cadastrados, 200
     response_mock.json.return_value = request.json, 200
     return response_mock.json()
 
@@ -92,7 +93,7 @@ def bicicleta_integrar_rede_route():
 
     fechamento_da_tranca(data['tranca_id']) # enviar email
 
-    response_mock.json.return_value = "Dados cadastrados", 200
+    response_mock.json.return_value = dados_cadastrados, 200
     return response_mock.json()
 
 
@@ -104,7 +105,7 @@ def retirar_bicicleta_rede_route():
 
     response_mock = Mock()
     if validar_bicicleta and validar_tranca:
-        response_mock.json.return_value = "Dados cadastrados", 200
+        response_mock.json.return_value = dados_cadastrados, 200
         return response_mock.json()
     response_mock.json.return_value = "Dados inválidos", 422
     return response_mock.json()
@@ -125,7 +126,7 @@ def cadastrar_totem_route():
     cadastrar_totem(totem)
 
     response_mock = Mock()
-    response_mock.status_code = "Dados cadastrados", 200
+    response_mock.status_code = dados_cadastrados, 200
     response_mock.json.return_value = request.json, 200
     return response_mock.json()
 
@@ -173,7 +174,7 @@ def cadastrar_tranca_route():
     cadastrar_tranca(tranca)
 
     response_mock = Mock()
-    response_mock.status_code = "Dados cadastrados", 200
+    response_mock.status_code = dados_cadastrados, 200
     response_mock.json.return_value = request.json, 200
     return response_mock.json()
 
@@ -211,7 +212,7 @@ def integrar_tranca_rede_route():
 
     response_mock = Mock()
     if validar_tranca:
-        response_mock.json.return_value = "Dados cadastrados", 200
+        response_mock.json.return_value = dados_cadastrados, 200
         return response_mock.json()
     response_mock.json.return_value = "Dados inválidos", 422
     return response_mock.json()
@@ -224,7 +225,7 @@ def retirar_tranca_rede_route():
 
     response_mock = Mock()
     if validar_tranca:
-        response_mock.json.return_value = "Dados cadastrados", 200
+        response_mock.json.return_value = dados_cadastrados, 200
         return response_mock.json()
     response_mock.json.return_value = "Dados inválidos", 422
     return response_mock.json()
