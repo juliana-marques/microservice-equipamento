@@ -46,5 +46,4 @@ def validar_id_totem(id_totem):
 
 
 def deletar_totem(id_totem):
-   
-    return repository.deletar_totem(id_totem)
+    return repository().deletar_totem(id_totem)

@@ -93,15 +93,26 @@ def editar_totem_route(id_totem):
 
     totem = request.json
     response_mock = Mock()
+
     response_mock.status_code = "Dados atualizados", 200
     response_mock.json.return_value =  editar_totem(id_totem, totem)
-
     return response_mock.json()
 
 
 @app.route('/totem/<int:id_totem>', methods=['DELETE'])
 def deletar_totem_route(id_totem):
-    return deletar_totem(id_totem)
+    isDelete = deletar_totem(id_totem)
+    response_mock = Mock()
+    if isDelete == True:
+        response_mock.status_code = 200
+        response_mock.json.return_value = "Dados removidos"
+    
+    if isDelete == False:
+        response_mock.status_code = 404
+        response_mock.json.return_value = "Dados não encontrados"
+
+    return response_mock.json()
+
     
 
 @app.route('/tranca', methods=['GET'])

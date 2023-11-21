@@ -28,7 +28,7 @@ def editar_bicicleta(id, bicicleta):
     
 
 def deletar_bicicleta(bicicleta_id):
-    return repository.deletar_bicicleta(bicicleta_id)
+    return repository().deletar_bicicleta(bicicleta_id)
 
 
 def validar_id(bicicleta_id):
