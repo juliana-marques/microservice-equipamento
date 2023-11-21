@@ -104,7 +104,6 @@ class TestRoutes(unittest.TestCase):
     def test_fechamento_tranca_true(self):
         json = {"numero_tranca": 1}
         data = fechamento_da_tranca(json)
-        data = True
         self.assertEqual(data, True)
         
 
