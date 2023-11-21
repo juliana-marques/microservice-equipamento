@@ -3,7 +3,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
 bicicletas = []
-id_bicicleta = 0
+id_bicicleta_global = 0
 
 class BicletaRepository:
     def __init__(self):
@@ -11,15 +11,15 @@ class BicletaRepository:
 
 
     def adicionar_bicicleta(self, bicicleta):
-        global id_bicicleta
-        print(bicicleta)
+        global id_bicicleta_global
         try:   
             if bicicleta['id']:
                 self.bicicletas.append(bicicleta)
         except:
-            id_bicicleta += 1
-            bicicleta['id'] = id_bicicleta
+            id_bicicleta_global += 1
+            bicicleta['id'] = id_bicicleta_global
             self.bicicletas.append(bicicleta)
+        return self.bicicletas
     
 
     def listar_bicicleta(self):

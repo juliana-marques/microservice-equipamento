@@ -44,7 +44,7 @@ def cadastrar_bicicleta_route():
     
     cadastrar_bicicleta(bicicleta)
     response_mock = Mock()
-    response_mock.status_code = "Dados atualizados", 200
+    response_mock.status_code = "Dados cadastrados", 200
     response_mock.json.return_value = request.json
     return response_mock.json()
 
@@ -79,20 +79,19 @@ def listar_totens_route():
 
 @app.route('/totem', methods=['POST'])
 def cadastrar_totem_route():
-    data = request.json
-    totem = Totem(data.get('localizacao'), data.get('descricao'))
+    totem = request.json
+    cadastrar_totem(totem)
+
     response_mock = Mock()
     response_mock.status_code = "Dados cadastrados", 200
-    response_mock.json_return_value = cadastrar_totem(totem)
-
+    response_mock.json.return_value = request.json
     return response_mock.json()
 
 
 @app.route('/totem/<int:id_totem>', methods=['PUT'])
 def editar_totem_route(id_totem):
 
-    data = request.json
-    totem = Totem(data.get('localizacao'), data.get('descricao'))
+    totem = request.json
     response_mock = Mock()
     response_mock.status_code = "Dados atualizados", 200
     response_mock.json.return_value =  editar_totem(id_totem, totem)

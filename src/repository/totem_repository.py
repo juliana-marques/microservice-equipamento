@@ -1,21 +1,30 @@
 import os, sys
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))                    
-sys.path.insert(0, project_root) 
+sys.path.insert(0, project_root)
+
+totens = []
+id_totem_global = 0
 
 class TotemRepository:
     def __init__(self):
-        self.totens = []
+        self.totens = totens
 
 
     def adicionar_totem(self, totem):
-        self.totens.append(totem)
-        return totem
+        global id_totem_global
+        try:   
+            if totem['id']:
+                self.totens.append(totem)
+        except:
+            id_totem_global += 1
+            totem['id'] = id_totem_global
+            self.totens.append(totem)
     
 
     def listar_totens(self):
         return self.totens
     
-    
+
     def deletar_totem(self, id_totem):
         for totem in self.totens:
             if totem['id'] == id_totem:

@@ -10,21 +10,20 @@ from repository.totem_repository import TotemRepository as repository
  
 
 def listar_totens():
-
-    return repository.listar_totens().json()
+    return repository().listar_totens()
 
 
 def cadastrar_totem(totem):
-    return repository.adicionar_totem(totem)
+    repository().adicionar_totem(totem)
 
 def editar_totem(id, totem):
-    totens = repository.listar_totens()
+    totens = repository().listar_totens()
 
     for t in totens:
         if t['id'] == id:
-            t = totem
-            repository.deletar_totem(id)
-            repository.adicionar_totem(t)
+            totem['id'] = id
+            repository().deletar_totem(id)
+            repository().adicionar_totem(totem)
 
     return totem
 
