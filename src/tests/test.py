@@ -255,5 +255,32 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(response.text, "Dados inválidos")
 
 
+    @patch('controller.main.retirar_tranca_rede_route')
+    def test_retirar_tranca_rede_aposentadoria_route(self, mock_retirar_tranca_rede):
+        dados_cadastrados = {"status_acao_reparador": "APOSENTADORIA", "numero": 1}
+        mock_retirar_tranca_rede.return_value = dados_cadastrados
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/tranca/retirarDaRede', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_cadastrados)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.text, "Dados cadastrados")
+
+
+    @patch('controller.main.retirar_bicicleta_rede_route')
+    def test_retirar_bicicleta_rede_aposentadoria_route(self, mock_retirar_tranca_rede):
+        dados_cadastrados = {"status_acao_reparador": "APOSENTADORIA", "numero_bicicleta": 1, "numero_tranca": 1}
+        mock_retirar_tranca_rede.return_value = dados_cadastrados
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/bicicleta/retirarDaRede', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_cadastrados)
+        print(response.text)
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.text, "Dados inválidos")
+
+
 if __name__ == '__main__':
     unittest.main()
