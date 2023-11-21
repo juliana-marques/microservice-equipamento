@@ -5,7 +5,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
 from controller.main import app
-from service.BicicletaService import listar_bicicleta_id
+from service.BicicletaService import listar_bicicleta_id, enum_status
 from service.TotemService import listar_totem_id
 from service.TrancaService import listar_tranca_id
 from repository.bicicleta_repository import BicletaRepository
@@ -70,6 +70,11 @@ class TestRoutes(unittest.TestCase):
 
         trancas_esperados = listar_tranca_id(1)
         self.assertEqual(data, trancas_esperados)
+
+    
+    def test_enum_status(self):
+        data = enum_status(1)
+        self.assertEqual(data, "DISPONIVEL")
 
     
     ################################################################################
@@ -363,7 +368,6 @@ class TestRoutes(unittest.TestCase):
 
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.text, "Dados inválidos")
-
 
 
 if __name__ == '__main__':
