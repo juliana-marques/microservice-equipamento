@@ -96,6 +96,11 @@ class TestRoutes(unittest.TestCase):
         data = enum_status(6)
         self.assertEqual(data, "EM_REPARO")
 
+    def test_deletar_bicicleta_true(self):
+        data = BicletaRepository().deletar_bicicleta(1)
+        data = True
+        self.assertEqual(data, True)
+
     
     ################################################################################
     #                                                                              #
