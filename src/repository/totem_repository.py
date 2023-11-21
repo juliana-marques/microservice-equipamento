@@ -15,6 +15,7 @@ class TotemRepository:
             id_totem_global += 1
             totem['id'] = id_totem_global
             self.totens.append(totem)
+            print(e)
     
 
     def listar_totens(self):

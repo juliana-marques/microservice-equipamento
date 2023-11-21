@@ -15,6 +15,7 @@ class TrancaRepository:
             id_tranca_global += 1
             tranca['id'] = id_tranca_global
             self.trancas.append(tranca)
+            print(e)
     
 
     def listar_trancas(self):
