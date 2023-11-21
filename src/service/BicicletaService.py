@@ -16,13 +16,13 @@ def cadastrar_bicicleta(bicicleta):
     repository().adicionar_bicicleta(bicicleta)
     
 
-def editar_bicicleta(id, bicicleta):
+def editar_bicicleta(id_bicicleta, bicicleta):
     bicicletas = repository().listar_bicicleta()
     
     for b in bicicletas:
-        if b['id'] == id:
-            bicicleta['id'] = id
-            repository().deletar_bicicleta(id)
+        if b['id'] == id_bicicleta:
+            bicicleta['id'] = id_bicicleta
+            repository().deletar_bicicleta(id_bicicleta)
             repository().adicionar_bicicleta(bicicleta)
     return bicicleta
     

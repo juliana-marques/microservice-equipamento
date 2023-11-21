@@ -2,15 +2,25 @@ import os, sys
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))                    
 sys.path.insert(0, project_root) 
 
+trancas = []
+id_tranca_global = 0
+
 class TrancaRepository:
     def __init__(self):
-        self.trancas = []
+        self.trancas = trancas
 
 
     def adicionar_tranca(self, tranca):
-        self.trancas.append(tranca)
+        global id_tranca_global
+        try:   
+            if tranca['id']:
+                self.trancas.append(tranca)
+        except:
+            id_tranca_global += 1
+            tranca['id'] = id_tranca_global
+            self.trancas.append(tranca)
     
-    
+
     def listar_trancas(self):
         return self.trancas
     

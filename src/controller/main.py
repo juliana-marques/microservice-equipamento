@@ -8,9 +8,9 @@ requests = Mock()
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))                    
 sys.path.insert(0, project_root)                                                                 
 
-from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, validar_id, deletar_bicicleta
-from service.TotemService import listar_totens, cadastrar_totem, editar_totem, validar_id_totem, deletar_totem
-from service.TrancaService import listar_trancas, cadastrar_tranca, buscar_tranca_por_id, editar_tranca, deletar_tranca, obter_bicicleta_tranca
+from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta
+from service.TotemService import listar_totens, cadastrar_totem, editar_totem, deletar_totem
+from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca
 
 ###### config do SONAR do problema de CSRF ###### 
 from flask_wtf import CSRFProtect               #
@@ -121,33 +121,40 @@ def obter_trancas_route():
 
 
 @app.route('/tranca', methods=['POST'])
-def cadastrar_trancas_route():
-    data = request.json
-    numero, localizacao, ano_de_fabricacao, modelo, status = data.get('numero'), data.get('localizacao'), data.get('ano_de_fabricacao'), data.get('modelo'), data.get('status')
+def cadastrar_tranca_route():
+    tranca = request.json
+    cadastrar_tranca(tranca)
 
-    return cadastrar_tranca(numero, localizacao, ano_de_fabricacao, modelo, status)
-
-
-@app.route('/tranca/<int:id_tranca>', methods=['GET'])
-def obter_tranca_por_id_route(id_tranca):
-    return buscar_tranca_por_id(id_tranca)
+    response_mock = Mock()
+    response_mock.status_code = "Dados cadastrados", 200
+    response_mock.json.return_value = request.json
+    return response_mock.json()
 
 
 @app.route('/tranca/<int:id_tranca>', methods=['PUT'])
-def editar_tranca_rout(id_tranca):
-    data = request.json
-    numero, localizacao, ano_de_fabricacao, modelo, status = data.get('numero'), data.get('localizacao'), data.get('ano_de_fabricacao'), data.get('modelo'), data.get('status')
+def editar_tranca_route(id_tranca):
 
-    return editar_tranca(id_tranca, numero, localizacao, ano_de_fabricacao, modelo, status)
+    tranca = request.json
+    response_mock = Mock()
+
+    response_mock.status_code = "Dados atualizados", 200
+    response_mock.json.return_value =  editar_tranca(id_tranca, tranca)
+    return response_mock.json()
 
 
 @app.route('/tranca/<int:id_tranca>', methods=['DELETE'])
 def deletar_tranca_route(id_tranca):
-    return deletar_tranca(id_tranca)
+    isDelete = deletar_tranca(id_tranca)
+    response_mock = Mock()
+    if isDelete == True:
+        response_mock.status_code = 200
+        response_mock.json.return_value = "Dados removidos"
+    
+    if isDelete == False:
+        response_mock.status_code = 404
+        response_mock.json.return_value = "Dados não encontrados"
 
-@app.route('/tranca/<int:id_tranca>/bicicleta', methods=['GET'])
-def obter_bicicleta_por_tranca(id_tranca):
-    bicicleta = obter_bicicleta_tranca(id_tranca)
+    return response_mock.json()
 
 
 if __name__ == '__main__':
