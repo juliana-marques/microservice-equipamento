@@ -160,7 +160,7 @@ class TestRoutes(unittest.TestCase):
 
 
     @patch('service.TrancaService.deletar_tranca')
-    def test_deletar_tranca__route(self, mock_deletar_tranca):
+    def test_deletar_tranca_route(self, mock_deletar_tranca):
 
         response = self.client.get('/get_csrf_token')
         token = response.get_data(as_text=True)
@@ -213,7 +213,7 @@ class TestRoutes(unittest.TestCase):
         response = self.client.get('/get_csrf_token')
         token = response.get_data(as_text=True)
 
-        response = self.client.delete('/bicicleta/1', headers={"Content-Type": "application/json", "X-CSRFToken": token})
+        response = self.client.delete('/totem/1', headers={"Content-Type": "application/json", "X-CSRFToken": token})
 
         mock_deletar_totem.return_value = "Dados não encontrados"
 
