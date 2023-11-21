@@ -37,3 +37,12 @@ def listar_bicicleta_id(bicicleta_id):
         if b['id'] == bicicleta_id:
             return b
     return "Não encontrado"
+
+def integrar_bicicleta_rede(data):
+    bicicletas = BicletaRepository().listar_bicicleta()
+    for b in bicicletas:
+        if b['numero'] == data:
+            b['status'] = "DISPONIVEL"
+            editar_bicicleta(b['id'], b)
+            return True
+    return False

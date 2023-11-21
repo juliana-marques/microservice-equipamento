@@ -8,9 +8,9 @@ requests = Mock()
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))                    
 sys.path.insert(0, project_root)                                                                 
 
-from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta, listar_bicicleta_id
+from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta, listar_bicicleta_id, integrar_bicicleta_rede
 from service.TotemService import listar_totens, cadastrar_totem, editar_totem, deletar_totem, listar_totem_id
-from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id, integrar_tranca_rede, retirar_tranca_rede
+from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id, integrar_tranca_rede, retirar_tranca_rede, validar_tranca_integrar_bicicleta, fechamento_da_tranca
 
 ###### config do SONAR do problema de CSRF ###### 
 from flask_wtf import CSRFProtect               #
@@ -76,6 +76,25 @@ def deletar_bicicleta_route(bicicleta_id):
         response_mock.json.return_value = "Dados não encontrados", 404
 
     return response_mock.json()
+
+
+@app.route('/bicicleta/integrarNaRede', methods=['POST'])
+def bicicleta_integrar_rede_route():
+    data = request.json
+    response_mock = Mock()
+
+    validacao_tranca = validar_tranca_integrar_bicicleta(data['tranca_id'])
+    validacao_bicicleta = integrar_bicicleta_rede(data['bicicleta_numero'])
+
+    if not validacao_tranca or not validacao_bicicleta:
+        response_mock.json.return_value = "Dados inválidos", 422
+        return response_mock.json()
+
+    fechamento_da_tranca(data['tranca_id']) # enviar email
+
+    response_mock.json.return_value = "Dados cadastrados", 200
+    return response_mock.json()
+
 
 @app.route('/totem', methods=['GET'])
 def listar_totens_route():

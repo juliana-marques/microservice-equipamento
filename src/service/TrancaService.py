@@ -65,3 +65,19 @@ def retirar_tranca_rede(data):
                 # envia email / registra data  e hota, numero e o reparador
                 return True
     return False
+
+def validar_tranca_integrar_bicicleta(data):
+    trancas = repository().listar_trancas()
+    for tranca in trancas:
+        if data == tranca['id'] and tranca['status'] == "DISPONIVEL":
+            return True
+    return False
+
+def fechamento_da_tranca(data):
+    trancas = repository().listar_trancas()
+    for tranca in trancas:
+        if data == tranca['id']:
+            tranca['status'] = "EM_USO"
+            tranca = editar_tranca(tranca['id'], tranca)
+            return True
+    return False
