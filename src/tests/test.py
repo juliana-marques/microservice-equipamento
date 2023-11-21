@@ -7,7 +7,7 @@ sys.path.insert(0, project_root)
 from controller.main import app
 from service.BicicletaService import listar_bicicleta_id, enum_status
 from service.TotemService import listar_totem_id
-from service.TrancaService import listar_tranca_id
+from service.TrancaService import listar_tranca_id, fechamento_da_tranca
 from repository.bicicleta_repository import BicletaRepository
 from repository.totem_repository import TotemRepository
 from repository.tranca_repository import TrancaRepository
@@ -96,10 +96,11 @@ class TestRoutes(unittest.TestCase):
         data = enum_status(6)
         self.assertEqual(data, "EM_REPARO")
 
-    def test_deletar_bicicleta_true(self):
-        data = BicletaRepository().deletar_bicicleta(1)
-        data = True
-        self.assertEqual(data, True)
+    def test_fechamento_tranca(self):
+        json = {"numero_tranca": 1}
+        data = fechamento_da_tranca(json)
+        self.assertEqual(data, False)
+        
 
     
     ################################################################################
