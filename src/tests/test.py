@@ -8,7 +8,6 @@ from controller.main import app
 from repository.bicicleta_repository import BicletaRepository
 from repository.totem_repository import TotemRepository
 from repository.tranca_repository import TrancaRepository
-from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta, listar_bicicleta_id, integrar_bicicleta_rede, retirar_bicicleta_rede
 
 
 class TestRoutes(unittest.TestCase):
@@ -51,6 +50,7 @@ class TestRoutes(unittest.TestCase):
     #                                                                              #
     ################################################################################
 
+
     @patch('service.BicicletaService.cadastrar_bicicleta')
     def test_cadastrar_bicicleta_route(self, mock_cadastrar_bicicleta):
         dados_cadastrados = {"id": "1", "marca": "marca_teste", "modelo": "modelo_teste", "ano": "2023", "numero": 1, "status": "DISPONIVEL"}
@@ -62,6 +62,33 @@ class TestRoutes(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, dados_cadastrados)
+
+
+    @patch('service.TotemService.cadastrar_totem')
+    def test_cadastrar_totem_route(self, mock_cadastrar_totem):
+        dados_cadastrados = {"id": "1", "localizacao": "localizacao_teste", "modelo": "descricao_teste"}
+        mock_cadastrar_totem.return_value = dados_cadastrados
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/totem', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_cadastrados)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, dados_cadastrados)
+    
+
+    @patch('service.TrancaService.cadastrar_tranca')
+    def test_cadastrar_tranca_route(self, mock_cadastrar_tranca):
+        dados_cadastrados = {"id": "1", "numero": 1, "localizacao": "localizacao_teste", "ano_de_fabricacao": "2023", "modelo": "modelo_teste", "status": "DISPONIVEL"}
+        mock_cadastrar_tranca.return_value = dados_cadastrados
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/tranca', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_cadastrados)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, dados_cadastrados)
+
 
 if __name__ == '__main__':
     unittest.main()
