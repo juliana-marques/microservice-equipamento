@@ -11,11 +11,12 @@ class BicletaRepository:
         try:   
             if bicicleta['id']:
                 self.bicicletas.append(bicicleta)
+                return bicicleta
         except Exception as e:
             id_bicicleta_global += 1
             bicicleta['id'] = id_bicicleta_global
             self.bicicletas.append(bicicleta)
-            print(e)
+            return e
     
 
     def listar_bicicleta(self):

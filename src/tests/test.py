@@ -1,5 +1,5 @@
-import unittest, os, sys, json
-from unittest.mock import Mock, patch
+import unittest, os, sys
+from unittest.mock import patch
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
@@ -17,7 +17,7 @@ class TestRoutes(unittest.TestCase):
     def setUp(self):
         self.app = app
         self.client = self.app.test_client()
-
+    
 
     def test_listar_bicicletas_route(self):
         response = self.client.get('/bicicleta')
@@ -246,6 +246,21 @@ class TestRoutes(unittest.TestCase):
 
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.text, "Dados inválidos")
+
+
+    @patch('controller.main.integrar_tranca_rede_route')
+    def test_integrar_tranca_rede_test_route(self, mock_integrar_tranca_rede):
+        dados_cadastrados = {"numero": 1}
+        mock_integrar_tranca_rede.return_value = dados_cadastrados
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/tranca/integrarNaRede', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_cadastrados)
+        response.status_code = 200
+        response.text = "Dados cadastrados"
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.text, "Dados cadastrados")
 
 
     @patch('controller.main.retirar_tranca_rede_route')
