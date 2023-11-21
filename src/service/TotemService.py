@@ -1,62 +1,29 @@
 from unittest.mock import Mock
+import os, sys
 requests = Mock()
+from repository.totem_repository import TotemRepository as repository
+ 
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))                    
+sys.path.insert(0, project_root) 
 
 def listar_totens():
-    response_mock = Mock()
-    response_mock.status_code = 200
-    response_mock.json.return_value = [{
-        "id": 1,
-        "localizacao": "Rio de Janeiro",
-        "descricao": "Descricao nada criativa"
-    },
-    {
-        "id": 2,
-        "localizacao": "Rio de Janeiro",
-        "descricao": "Descricao nada criativa"
-    }]
-    return response_mock.json()
+
+    return repository.listar_totens().json()
 
 
-def cadastrar_totem(localizacao, descricao):
-    response_mock = Mock()
-    response_mock.status_code = "Dados cadastrados", 200
+def cadastrar_totem(totem):
+    return repository.adicionar_totem(totem)
 
-    validacao = True
-    if validacao == False:
-        response_mock.status_code = 422
-        response_mock.json.return_value = [{
-            "codigo": 422,
-            "mensagem": "Dados inválidos"
-        }]
-        return response_mock.json()
-    
-    response_mock.json.return_value = {
-        "id": 3,
-        "localizacao": localizacao,
-        "descricao": descricao
-    }
-    return response_mock.json()
+def editar_totem(id, totem):
+    totens = repository.listar_totens()
 
+    for t in totens:
+        if t['id'] == id:
+            t = totem
+            repository.deletar_totem(id)
+            repository.adicionar_totem(t)
 
-def editar_totem(id, localizacao, descricao):
-    response_mock = Mock()
-    response_mock.status_code = "Dados atualizados", 200
-
-    validacao = True
-    if validacao == False:
-        response_mock.status_code = 422
-        response_mock.json.return_value = [{
-            "codigo": 422,
-            "mensagem": "Dados inválidos."
-        }]
-        return response_mock.json()
-    
-    response_mock.json.return_value = {
-        "id": id,
-        "localizacao": localizacao,
-        "descricao": descricao
-    }
-    return response_mock.json()
+    return totem
 
 
 def validar_id_totem(id_totem):
@@ -77,21 +44,5 @@ def validar_id_totem(id_totem):
 
 
 def deletar_totem(id_totem):
-    response_mock = Mock()
-    response_mock.status_code = 200
-    response_mock.json.return_value = "Dados removidos"
-
-    totens = listar_totens()
-    for totem in totens:
-        if totem['id'] == id_totem:
-            totens.remove(totem)
-            return response_mock.json()
-    
-    response_mock.status_code = 422
-    response_mock.json.return_value = [
-        {
-            "codigo": 404,
-            "mensagem": "Não encontrado"
-        }
-    ]
-    return response_mock.json()
+   
+    return repository.deletar_totem(id_totem)

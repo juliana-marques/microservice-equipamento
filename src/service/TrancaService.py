@@ -122,6 +122,13 @@ def deletar_tranca(id_tranca):
 
     return response_mock.json()
         
+def obter_bicicleta_tranca(id_tranca):
+   trancas = listar_trancas()
+
+   for tranca in trancas:
+       if tranca['id'] == id_tranca:
+           return tranca
+
 def validar_id(id_tranca):
     trancas = listar_trancas()
 
