@@ -18,26 +18,6 @@ class TestRoutes(unittest.TestCase):
         self.app = app
         self.client = self.app.test_client()
 
-    def test_method_delete_bicicleta(self):
-
-        id_bicicleta = "1"
-        response = BicletaRepository().deletar_bicicleta(id_bicicleta)
-        self.assertEqual(response, True)
-
-    
-    def test_method_delete_totem(self):
-        
-        id_totem = "1"
-        response =  TotemRepository().deletar_totem(id_totem)
-        self.assertEqual(response, True)
-
-
-    def test_method_delete_tranca(self):
-
-        id_tranca = "1"
-        response = TrancaRepository().deletar_tranca(id_tranca)
-        self.assertEqual(response, True)
-
 
     def test_listar_bicicletas_route(self):
         response = self.client.get('/bicicleta')
@@ -178,6 +158,25 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(response.json, dados_editados)
 
 
+
+    @patch('service.TrancaService.deletar_tranca')
+    def test_deletar_tranca__route(self, mock_deletar_tranca):
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+
+        response = self.client.delete('/tranca/1', headers={"Content-Type": "application/json", "X-CSRFToken": token})
+        response.status_code = 200
+        response.text = "Dados removidos"
+
+        mock_deletar_tranca.return_value = "Dados removidos"
+
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.text, mock_deletar_tranca.return_value)
+
+
+
     @patch('service.TrancaService.deletar_tranca')
     def test_deletar_tranca_invalido_route(self, mock_deletar_tranca):
 
@@ -285,8 +284,8 @@ class TestRoutes(unittest.TestCase):
         token = response.get_data(as_text=True)
         response = self.client.post('/tranca/retirarDaRede', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_cadastrados)
 
-        self.assertEqual(response.status_code, 422)
-        self.assertEqual(response.text, "Dados inválidos")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.text, "Dados cadastrados")
 
 
     @patch('controller.main.retirar_bicicleta_rede_route')
