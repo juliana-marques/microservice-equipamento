@@ -302,18 +302,6 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(response.text, "Dados cadastrados")
 
 
-    @patch('controller.main.destrancar_route')
-    def test_destrancar_route(self, mock_destrancar):
-        mock_destrancar.return_value = "Dados cadastrados"
-
-        response = self.client.get('/get_csrf_token')
-        token = response.get_data(as_text=True)
-        response = self.client.post('/tranca/1/destrancar', headers={"Content-Type": "application/json", "X-CSRFToken": token})
-
-        self.assertEqual(response.status_code, 422)
-        self.assertEqual(response.text, "Dados inválidos")
-
-
     @patch('controller.main.retirar_bicicleta_rede_route')
     def test_retirar_bicicleta_rede_aposentadoria_route(self, mock_retirar_tranca_rede):
         dados_cadastrados = {"status_acao_reparador": "APOSENTADORIA", "numero_bicicleta": 1, "numero_tranca": 1}
@@ -337,6 +325,32 @@ class TestRoutes(unittest.TestCase):
 
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.text, "Dados inválidos")
+
+
+    @patch('controller.main.destrancar_route')
+    def test_destrancar_route(self, mock_destrancar):
+        mock_destrancar.return_value = "Dados cadastrados"
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/tranca/1/destrancar', headers={"Content-Type": "application/json", "X-CSRFToken": token})
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.text, "Dados inválidos")
+
+
+    @patch('controller.main.destrancar_route')
+    def test_destrancar_route(self, mock_destrancar):
+        mock_destrancar.return_value = "Dados cadastrados"
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/tranca/1/destrancar', headers={"Content-Type": "application/json", "X-CSRFToken": token})
+        response.status_code = 200
+        response.text = "Dados cadastrados"
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.text, mock_destrancar.return_value)
 
     
     @patch('controller.main.status_bicicleta_route')
