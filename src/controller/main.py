@@ -211,8 +211,8 @@ def deletar_tranca_route(id_tranca):
 
 @app.route('/tranca/integrarNaRede', methods=['POST'])
 def integrar_tranca_rede_route():
-    numero_tranca = request.json
-    validar_tranca = integrar_tranca_rede(numero_tranca)
+    data = request.json
+    validar_tranca = integrar_tranca_rede(data)
 
     response_mock = Mock()
     if validar_tranca:

@@ -201,5 +201,32 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.text, mock_deletar_totem.return_value)
 
+
+    @patch('controller.main.bicicleta_integrar_rede_route')
+    def test_integrar_bicicleta_rede_route(self, mock_integrar_bicicleta_rede):
+        dados_cadastrados = {"tranca_id": "1", "bicicleta_numero": 1}
+        mock_integrar_bicicleta_rede.return_value = dados_cadastrados
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/bicicleta/integrarNaRede', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_cadastrados)
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.text, "Dados inválidos")
+
+
+    @patch('controller.main.integrar_tranca_rede_route')
+    def test_integrar_tranca_rede_route(self, mock_integrar_tranca_rede):
+        dados_cadastrados = {"numero": 1}
+        mock_integrar_tranca_rede.return_value = dados_cadastrados
+
+        response = self.client.get('/get_csrf_token')
+        token = response.get_data(as_text=True)
+        response = self.client.post('/tranca/integrarNaRede', headers={"Content-Type": "application/json", "X-CSRFToken": token}, json=dados_cadastrados)
+        print(response.text)
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.text, "Dados inválidos")
+
 if __name__ == '__main__':
     unittest.main()
