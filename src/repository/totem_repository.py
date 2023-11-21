@@ -11,7 +11,7 @@ class TotemRepository:
         try:   
             if totem['id']:
                 self.totens.append(totem)
-        except:
+        except Exception as e:
             id_totem_global += 1
             totem['id'] = id_totem_global
             self.totens.append(totem)

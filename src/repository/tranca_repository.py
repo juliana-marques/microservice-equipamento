@@ -11,7 +11,7 @@ class TrancaRepository:
         try:   
             if tranca['id']:
                 self.trancas.append(tranca)
-        except:
+        except Exception as e:
             id_tranca_global += 1
             tranca['id'] = id_tranca_global
             self.trancas.append(tranca)
