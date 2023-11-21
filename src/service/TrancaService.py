@@ -32,11 +32,11 @@ def listar_tranca_id(tranca_id):
             return t
     return "Não encontrado"
 
-def integrar_tranca_rede(numero_tranca):
+def integrar_tranca_rede(data):
     trancas = repository().listar_trancas()
     
     for tranca in trancas:
-        if numero_tranca['numero'] == tranca['numero']:
+        if data['numero'] == tranca['numero']:
             if tranca['status'] == "NOVA" or tranca['status'] == "EM_REPARO":
                 tranca['status'] = "DISPONIVEL"
                 tranca = editar_tranca(tranca['id'], tranca)
