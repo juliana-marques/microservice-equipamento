@@ -1,5 +1,4 @@
 trancas = []
-id_tranca_global = 0
 
 class TrancaRepository:
     def __init__(self):
@@ -7,15 +6,7 @@ class TrancaRepository:
 
 
     def adicionar_tranca(self, tranca):
-        global id_tranca_global
-        try:   
-            if tranca['id']:
-                self.trancas.append(tranca)
-        except Exception as e:
-            id_tranca_global += 1
-            tranca['id'] = id_tranca_global
-            self.trancas.append(tranca)
-            print(e)
+        self.trancas.append(tranca)
     
 
     def listar_trancas(self):

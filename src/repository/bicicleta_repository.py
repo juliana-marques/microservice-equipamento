@@ -1,5 +1,4 @@
 bicicletas = []
-id_bicicleta_global = 0
 
 class BicletaRepository:
     def __init__(self):
@@ -7,17 +6,8 @@ class BicletaRepository:
 
 
     def adicionar_bicicleta(self, bicicleta):
-        global id_bicicleta_global
-        try:   
-            if bicicleta['id']:
-                self.bicicletas.append(bicicleta)
-                return bicicleta
-        except Exception as e:
-            id_bicicleta_global += 1
-            bicicleta['id'] = id_bicicleta_global
-            self.bicicletas.append(bicicleta)
-            return e
-    
+        self.bicicletas.append(bicicleta)
+        
 
     def listar_bicicleta(self):
         return self.bicicletas

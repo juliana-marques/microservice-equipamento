@@ -5,32 +5,80 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)  
 
 from repository.tranca_repository import TrancaRepository as repository
+from model.tranca import Tranca
+
+id_tranca_global = 0
+numero_tranca_global = 0
 
 def listar_trancas():
     return repository().listar_trancas()
 
-def cadastrar_tranca(tranca):
-    repository().adicionar_tranca(tranca)
 
-def editar_tranca(id_tranca, tranca):
+def listar_tranca_id(tranca_id):
     trancas = repository().listar_trancas()
+    for tranca in trancas:
+        if tranca['id'] == tranca_id:
+            return tranca
+    return False
 
-    for t in trancas:
-        if t['id'] == id_tranca:
-            tranca['id'] = id_tranca
-            repository().deletar_tranca(id_tranca)
-            repository().adicionar_tranca(tranca)
-    return tranca
+
+def cadastrar_tranca(tranca_dados):
+    global id_tranca_global
+    global numero_tranca_global
+    id_tranca_global += 1
+    numero_tranca_global += 1
+
+    tranca = Tranca(
+        id = id_tranca_global,
+        numero = numero_tranca_global,
+        localizacao = tranca_dados["localizacao"],
+        ano_de_fabricacao = tranca_dados["ano_de_fabricacao"],
+        modelo = tranca_dados["modelo"],
+        status = tranca_dados["status"]
+    )
+
+    tranca_adicionar = {
+        "id": tranca.id,
+        "numero": tranca.numero,
+        "localizacao": tranca.localizacao,
+        "ano_de_fabricacao": tranca.ano_de_fabricacao,
+        "numero": tranca.numero,
+        "modelo": tranca.modelo,
+        "status": tranca.status,
+    }
+
+    repository().adicionar_tranca(tranca_adicionar)
+    return tranca_adicionar
+
+def editar_tranca(id_tranca, tranca_dados_editados):
+    tranca = listar_tranca_id(id_tranca)
+
+    tranca_editar = Tranca(
+        id = id_tranca,
+        numero = tranca_dados_editados["numero"],
+        localizacao = tranca_dados_editados["localizacao"],
+        ano_de_fabricacao = tranca_dados_editados["ano_de_fabricacao"],
+        modelo = tranca_dados_editados["modelo"],
+        status = tranca_dados_editados["status"]
+    )
+
+    tranca_editada = {
+        "id": tranca_editar.id,
+        "numero": tranca_editar.numero,
+        "localizacao": tranca_editar.localizacao,
+        "ano_de_fabricacao": tranca_editar.ano_de_fabricacao,
+        "numero": tranca_editar.numero,
+        "modelo": tranca_editar.modelo,
+        "status": tranca_editar.status,
+    }
+
+    if tranca["status"] != tranca_editada["status"]:
+        return False
+    return tranca_editada
 
 def deletar_tranca(id_tranca):
     return repository().deletar_tranca(id_tranca)
 
-def listar_tranca_id(tranca_id):
-    trancas = repository().listar_trancas()
-    for t in trancas:
-        if t['id'] == tranca_id:
-            return t
-    return "Não encontrado"
 
 def integrar_tranca_rede(data):
     trancas = repository().listar_trancas()

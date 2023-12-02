@@ -7,36 +7,83 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)     
 
 from repository.bicicleta_repository import BicletaRepository
+from model.bicicleta import Bicicleta
+id_bicicleta_global = 0
+numero_bicicleta_global = 0
 
 def listar_bicicletas():
     return BicletaRepository().listar_bicicleta()
 
 
-def cadastrar_bicicleta(bicicleta):
-    BicletaRepository().adicionar_bicicleta(bicicleta)
+def listar_bicicleta_id(bicicleta_id):
+    bicicletas = BicletaRepository().listar_bicicleta()
+    for bicicleta in bicicletas:
+        if bicicleta['id'] == bicicleta_id:
+            return bicicleta
+    return False
+
+
+def cadastrar_bicicleta(bicicleta_dados):
+    global id_bicicleta_global
+    global numero_bicicleta_global
+    id_bicicleta_global += 1
+    numero_bicicleta_global += 1
+
+    bicicleta = Bicicleta(
+        id = id_bicicleta_global,
+        marca = bicicleta_dados["marca"],
+        modelo = bicicleta_dados["modelo"],
+        ano = bicicleta_dados["ano"],
+        numero = numero_bicicleta_global,
+        status = bicicleta_dados["status"],
+    )
+
+    bicicleta_adicionar = {
+        "id": bicicleta.id,
+        "marca": bicicleta.marca,
+        "modelo": bicicleta.modelo,
+        "ano": bicicleta.ano,
+        "numero": bicicleta.numero,
+        "status": bicicleta.status
+    }
+
+    BicletaRepository().adicionar_bicicleta(bicicleta_adicionar)
+    return bicicleta_adicionar
     
 
-def editar_bicicleta(bicicleta_id, bicicleta):
-    bicicletas = BicletaRepository().listar_bicicleta()
+def editar_bicicleta(bicicleta_id, bicicleta_dados_editados):
+
+    bicicleta = listar_bicicleta_id(bicicleta_id)
+    if bicicleta["numero"] != bicicleta_dados_editados["numero"]:
+        return False
     
-    for b in bicicletas:
-        if b['id'] == bicicleta_id:
-            bicicleta['id'] = bicicleta_id
-            BicletaRepository().deletar_bicicleta(bicicleta_id)
-            BicletaRepository().adicionar_bicicleta(bicicleta)
-    return bicicleta
+    bicicleta_editar = Bicicleta(
+        id = bicicleta_id,
+        marca = bicicleta_dados_editados["marca"],
+        modelo = bicicleta_dados_editados["modelo"],
+        ano = bicicleta_dados_editados["ano"],
+        numero = bicicleta_dados_editados["numero"],
+        status = bicicleta_dados_editados["status"],
+    )
+
+    bicicleta_editada = {
+        "id": bicicleta_editar.id,
+        "marca": bicicleta_editar.marca,
+        "modelo": bicicleta_editar.modelo,
+        "ano": bicicleta_editar.ano,
+        "numero": bicicleta_editar.numero,
+        "status": bicicleta_editar.status
+    }
+
+    if bicicleta["status"] != bicicleta_editada["status"]:
+        return False
+
+    return bicicleta_editada
     
 
 def deletar_bicicleta(bicicleta_id):
     return BicletaRepository().deletar_bicicleta(bicicleta_id)
 
-
-def listar_bicicleta_id(bicicleta_id):
-    bicicletas = BicletaRepository().listar_bicicleta()
-    for b in bicicletas:
-        if b['id'] == bicicleta_id:
-            return b
-    return "Não encontrado"
 
 def integrar_bicicleta_rede(data):
     bicicletas = BicletaRepository().listar_bicicleta()

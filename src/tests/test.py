@@ -1,5 +1,6 @@
 import unittest, os, sys
 from unittest.mock import patch
+from flask_testing import TestCase
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
@@ -100,6 +101,7 @@ class TestRoutes(unittest.TestCase):
         json = {"numero_tranca": 1}
         data = fechamento_da_tranca(json)
         self.assertEqual(data, False)
+
 
         
     ################################################################################

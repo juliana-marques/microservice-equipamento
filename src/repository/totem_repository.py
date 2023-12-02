@@ -1,5 +1,5 @@
 totens = []
-id_totem_global = 0
+
 
 class TotemRepository:
     def __init__(self):
@@ -7,15 +7,7 @@ class TotemRepository:
 
 
     def adicionar_totem(self, totem):
-        global id_totem_global
-        try:   
-            if totem['id']:
-                self.totens.append(totem)
-        except Exception as e:
-            id_totem_global += 1
-            totem['id'] = id_totem_global
-            self.totens.append(totem)
-            print(e)
+        self.totens.append(totem)
     
 
     def listar_totens(self):
