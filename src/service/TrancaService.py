@@ -30,6 +30,7 @@ def cadastrar_tranca(tranca_dados):
 
     tranca = Tranca(
         id = id_tranca_global,
+        bicicleta=0,
         numero = numero_tranca_global,
         localizacao = tranca_dados["localizacao"],
         ano_de_fabricacao = tranca_dados["ano_de_fabricacao"],
@@ -39,6 +40,7 @@ def cadastrar_tranca(tranca_dados):
 
     tranca_adicionar = {
         "id": tranca.id,
+        "bicicleta": tranca.bicicleta,
         "numero": tranca.numero,
         "localizacao": tranca.localizacao,
         "ano_de_fabricacao": tranca.ano_de_fabricacao,
@@ -55,6 +57,7 @@ def editar_tranca(id_tranca, tranca_dados_editados):
 
     tranca_editar = Tranca(
         id = id_tranca,
+        bicicleta = tranca["bicicleta"],
         numero = tranca_dados_editados["numero"],
         localizacao = tranca_dados_editados["localizacao"],
         ano_de_fabricacao = tranca_dados_editados["ano_de_fabricacao"],
@@ -64,6 +67,7 @@ def editar_tranca(id_tranca, tranca_dados_editados):
 
     tranca_editada = {
         "id": tranca_editar.id,
+        "bicicleta": tranca_editar.bicicleta,
         "numero": tranca_editar.numero,
         "localizacao": tranca_editar.localizacao,
         "ano_de_fabricacao": tranca_editar.ano_de_fabricacao,
@@ -74,25 +78,93 @@ def editar_tranca(id_tranca, tranca_dados_editados):
 
     if tranca["status"] != tranca_editada["status"]:
         return False
+    
+    repository().editar_tranca(tranca_editada)
     return tranca_editada
 
 def deletar_tranca(id_tranca):
     return repository().deletar_tranca(id_tranca)
 
 
-def integrar_tranca_rede(data):
-    trancas = repository().listar_trancas()
-    
-    for tranca in trancas:
-        if data['numero'] == tranca['numero']:
-            if tranca['status'] == "NOVA" or tranca['status'] == "EM_REPARO":
-                tranca['status'] = "DISPONIVEL"
-                tranca = editar_tranca(tranca['id'], tranca)
-                # enviar email
-                # se em reparo -> conferir funcionário
-                # inserir data e hora na inserção do totem, matricula do reparador e o numero da tranca
-                return True
-    return False
+def integrar_tranca_rede(tranca):
+    tranca_na_rede = Tranca(
+        id = tranca["id"],
+        bicicleta = tranca["bicicleta"],
+        numero = tranca["numero"],
+        localizacao = tranca["localizacao"],
+        ano_de_fabricacao = tranca["ano_de_fabricacao"],
+        modelo = tranca["modelo"],
+        status = 5,
+    )
+
+    tranca_incluida = {
+        "id": tranca_na_rede.id,
+        "bicicleta": tranca_na_rede.bicicleta,
+        "numero": tranca_na_rede.numero,
+        "localizacao": tranca_na_rede.localizacao,
+        "ano_de_fabricacao": tranca_na_rede.ano_de_fabricacao,
+        "numero": tranca_na_rede.numero,
+        "modelo": tranca_na_rede.modelo,
+        "status": tranca_na_rede.status,
+    }
+
+    repository().editar_tranca(tranca_incluida)
+
+    return tranca_incluida
+
+
+def status_trancar(tranca):
+    tranca_na_rede = Tranca(
+        id = tranca["id"],
+        bicicleta = tranca["bicicleta"],
+        numero = tranca["numero"],
+        localizacao = tranca["localizacao"],
+        ano_de_fabricacao = tranca["ano_de_fabricacao"],
+        modelo = tranca["modelo"],
+        status = 3,
+    )
+
+    tranca_incluida = {
+        "id": tranca_na_rede.id,
+        "bicicleta": tranca_na_rede.bicicleta,
+        "numero": tranca_na_rede.numero,
+        "localizacao": tranca_na_rede.localizacao,
+        "ano_de_fabricacao": tranca_na_rede.ano_de_fabricacao,
+        "numero": tranca_na_rede.numero,
+        "modelo": tranca_na_rede.modelo,
+        "status": tranca_na_rede.status,
+    }
+
+    repository().editar_tranca(tranca_incluida)
+
+    return tranca_incluida
+
+
+def status_destrancar(tranca):
+    tranca_na_rede = Tranca(
+        id = tranca["id"],
+        bicicleta = tranca["bicicleta"],
+        numero = tranca["numero"],
+        localizacao = tranca["localizacao"],
+        ano_de_fabricacao = tranca["ano_de_fabricacao"],
+        modelo = tranca["modelo"],
+        status = 4,
+    )
+
+    tranca_incluida = {
+        "id": tranca_na_rede.id,
+        "bicicleta": tranca_na_rede.bicicleta,
+        "numero": tranca_na_rede.numero,
+        "localizacao": tranca_na_rede.localizacao,
+        "ano_de_fabricacao": tranca_na_rede.ano_de_fabricacao,
+        "numero": tranca_na_rede.numero,
+        "modelo": tranca_na_rede.modelo,
+        "status": tranca_na_rede.status,
+    }
+
+    repository().editar_tranca(tranca_incluida)
+
+    return tranca_incluida
 
 def retirar_tranca_rede(data):
     trancas = repository().listar_trancas()

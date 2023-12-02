@@ -77,6 +77,8 @@ def editar_bicicleta(bicicleta_id, bicicleta_dados_editados):
 
     if bicicleta["status"] != bicicleta_editada["status"]:
         return False
+    
+    BicletaRepository().editar_bicicleta(bicicleta_editada)
 
     return bicicleta_editada
     

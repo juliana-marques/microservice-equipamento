@@ -1,6 +1,7 @@
 import os, sys
 from flask import Flask,  request
 from unittest.mock import Mock
+from datetime import datetime
 
 app = Flask(__name__)
 requests = Mock()
@@ -9,8 +10,8 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)                                                                 
 
 from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta, listar_bicicleta_id, integrar_bicicleta_rede, retirar_bicicleta_rede, status_bicicleta
-from service.TotemService import listar_totens, cadastrar_totem, deletar_totem, listar_totem_id
-from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id, integrar_tranca_rede, retirar_tranca_rede, validar_tranca_integrar_bicicleta, fechamento_da_tranca, validar_tranca_retirar_bicicleta, trancar, destrancar
+from service.TotemService import listar_totens, cadastrar_totem, deletar_totem, listar_totem_id, adicionar_tranca_totem
+from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id, integrar_tranca_rede, retirar_tranca_rede, validar_tranca_integrar_bicicleta, fechamento_da_tranca, validar_tranca_retirar_bicicleta, status_trancar, status_destrancar
 from model.bicicleta import Bicicleta
 from model.tranca import Tranca
 from model.totem import Totem
@@ -36,6 +37,8 @@ dados_removidos = "Dados removidos"
 dados_nao_encontrados = "Dados não encontrados"
 dados_invalidos = "Dados inválidos"
 
+date = datetime.now()
+data_horario = date.strftime("%d/%m/%Y %H:%M:%S")
 
 @app.route('/bicicleta', methods=['GET'])
 def listar_bicicletas_route():
@@ -407,17 +410,35 @@ def deletar_tranca_route(id_tranca):
 
     return response_mock.json()
 
-######################################################
+
 @app.route('/tranca/integrarNaRede', methods=['POST'])
 def integrar_tranca_rede_route():
-    data = request.json
-    validar_tranca = integrar_tranca_rede(data)
-
     response_mock = Mock()
-    if validar_tranca:
-        response_mock.json.return_value = dados_cadastrados, 200
-        return response_mock.json()
     response_mock.json.return_value = dados_invalidos, 422
+
+    response = request.json
+
+    json = ["id_totem", "id_tranca", "id_funcionario"]
+    for data in json:
+        if response.get(f"{data}") == None:
+            return response_mock.json()
+    
+    tranca = listar_tranca_id(response["id_tranca"])
+    if tranca == False:
+        return response_mock.json()
+    
+    totem = listar_totem_id(response["id_totem"])
+    if totem == False:
+        return response_mock.json()
+    
+    print(tranca["status"])
+    if tranca["status"] == "NOVA" or tranca["status"] == "EM_REPARO":
+        tranca_rede = integrar_tranca_rede(tranca)
+        adicionar_tranca_totem(response["id_totem"], tranca_rede, data_horario)
+        response_mock.json.return_value = dados_cadastrados, 200
+
+    # ENVIA MENSAGEM PARA O REPARADOR 
+
     return response_mock.json()
 
 
@@ -436,27 +457,47 @@ def retirar_tranca_rede_route():
 
 @app.route('/tranca/<int:id_tranca>/trancar', methods=['POST'])
 def trancar_route(id_tranca):
-    validar_tranca = trancar(id_tranca)
-
     response_mock = Mock()
-    if validar_tranca:
-        response_mock.json.return_value = dados_cadastrados, 200
-        return response_mock.json()
     response_mock.json.return_value = dados_invalidos, 422
+
+    tranca = listar_tranca_id(id_tranca)
+    if tranca == False:
+        response_mock.json.return_value = dados_nao_encontrados, 422
+        return response_mock.json()
+    
+    data = request.json
+    if len(data) == 1:
+        if data.get("bicicleta") == None:
+            return response_mock.json()
+        else:
+            tranca["bicicleta"] = data["bicicleta"]
+
+    status_trancar(tranca)
+    response_mock.json.return_value = dados_cadastrados, 200
     return response_mock.json()
 
 
 @app.route('/tranca/<int:id_tranca>/destrancar', methods=['POST'])
 def destrancar_route(id_tranca):
-    validar_tranca = destrancar(id_tranca)
-
     response_mock = Mock()
-    if validar_tranca:
-        response_mock.json.return_value = dados_cadastrados, 200
-        return response_mock.json()
     response_mock.json.return_value = dados_invalidos, 422
+
+    tranca = listar_tranca_id(id_tranca)
+    if tranca == False:
+        response_mock.json.return_value = dados_nao_encontrados, 422
+        return response_mock.json()
+    
+    data = request.json
+    if len(data) == 1:
+        if data.get("bicicleta") == None:
+            return response_mock.json()
+        else:
+            tranca["bicicleta"] = data["bicicleta"]
+
+    status_destrancar(tranca)
+    response_mock.json.return_value = dados_cadastrados, 200
     return response_mock.json()
-######################################################
+
 
 if __name__ == '__main__':
     app.run(port=int(os.environ.get("PORT", 8080)),host='0.0.0.0',debug=True)

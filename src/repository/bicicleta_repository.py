@@ -19,3 +19,11 @@ class BicletaRepository:
                 self.bicicletas.remove(bicicleta)
                 return True
         return False
+    
+    def editar_bicicleta(self, bicicleta_editada):
+        bicicletas = self.listar_bicicleta()
+
+        for bicicleta in bicicletas:
+            if bicicleta["id"] == bicicleta_editada["id"]:
+                self.trancas.remove(bicicleta)
+                self.trancas.append(bicicleta_editada)

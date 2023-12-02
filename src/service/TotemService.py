@@ -46,3 +46,7 @@ def listar_totem_id(totem_id):
         if totem['id'] == totem_id:
             return totem
     return False
+
+def adicionar_tranca_totem(id_totem, tranca, data):
+    tranca = repository().adicionar_tranca_totem(id_totem, tranca, data)
+    return tranca

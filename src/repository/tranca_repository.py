@@ -19,3 +19,11 @@ class TrancaRepository:
                 self.trancas.remove(tranca)
                 return True
         return False
+    
+    def editar_tranca(self, tranca_editada):
+        trancas = self.listar_trancas()
+
+        for tranca in trancas:
+            if tranca["id"] == tranca_editada["id"]:
+                self.trancas.remove(tranca)
+                self.trancas.append(tranca_editada)
