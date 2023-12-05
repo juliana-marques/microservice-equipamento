@@ -37,6 +37,7 @@ class TestRoutes(unittest.TestCase):
         bicicletas_esperadas = listar_bicicleta_id(1)
         if bicicletas_esperadas == False:
             code = 404
+            self.assertEqual("Dados não encontrados", response.text)
 
         self.assertEqual(response.status_code, code)
 
@@ -59,6 +60,7 @@ class TestRoutes(unittest.TestCase):
         totens_esperados = listar_totem_id(1)
         if totens_esperados == False:
             code = 404
+            self.assertEqual("Dados não encontrados", response.text)
 
         self.assertEqual(response.status_code, code)
 
@@ -79,6 +81,8 @@ class TestRoutes(unittest.TestCase):
         trancas_esperados = listar_tranca_id(1)
         if trancas_esperados == False:
             code = 404
+            self.assertEqual("Dados não encontrados", response.text)
+
         self.assertEqual(response.status_code, code)
 
     @patch('controller.main.cadastrar_bicicleta_route')
