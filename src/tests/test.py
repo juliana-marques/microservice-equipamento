@@ -86,26 +86,59 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(response.status_code, code)
 
     @patch('controller.main.cadastrar_bicicleta_route')
-    def test_cadastrar_bicicleta_route_200(self, mock_cadastrar_bicicleta):
+    def test_cadastrar_bicicleta_route_422(self, mock_cadastrar_bicicleta):
         dados_cadastrados = {"marca": "marca_teste", "modelo": "modelo_teste", "ano": "2023", "numero": 1, "status": 3}
         mock_cadastrar_bicicleta.return_value = dados_cadastrados
 
         response = self.client.post('/bicicleta', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
-        dados_cadastrados = {'ano': '2023', 'id': 1, 'marca': 'marca_teste', 'modelo': 'modelo_teste', 'numero': 1, 'status': 'NOVA'}
 
         self.assertEqual(response.status_code, 422)
 
     @patch('controller.main.cadastrar_bicicleta_route')
-    def test_cadastrar_bicicleta_route_422(self, mock_cadastrar_bicicleta):
+    def test_cadastrar_bicicleta_route_200(self, mock_cadastrar_bicicleta):
         dados_cadastrados = {"marca": "marca_teste", "modelo": "modelo_teste", "ano": "2023", "numero": 0, "status": 3}
         mock_cadastrar_bicicleta.return_value = dados_cadastrados
 
         response = self.client.post('/bicicleta', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
-        dados_cadastrados = {'ano': '2023', 'id': 1, 'marca': 'marca_teste', 'modelo': 'modelo_teste', 'numero': 1, 'status': 'NOVA'}
+
+        self.assertEqual(response.status_code, 200)
+
+    @patch('controller.main.cadastrar_totem_route')
+    def test_cadastrar_bicicleta_routecadastrar_totem_route_422(self, mock_cadastrar_totem):
+        dados_cadastrados = {"localizacao": "Localizacao_01"}
+        mock_cadastrar_totem.return_value = dados_cadastrados
+
+        response = self.client.post('/totem', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
+
+        self.assertEqual(response.status_code, 422)
+
+    @patch('controller.main.cadastrar_totem_route')
+    def test_cadastrar_bicicleta_routecadastrar_totem_route_200(self, mock_cadastrar_totem):
+        dados_cadastrados = {"localizacao": "Localizacao_01", "descricao": "teste"}
+        mock_cadastrar_totem.return_value = dados_cadastrados
+
+        response = self.client.post('/totem', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
 
         self.assertEqual(response.status_code, 200)
 
 
+    @patch('controller.main.cadastrar_tranca_route')
+    def test_cadastrar_tranca_routee_422(self, mock_cadastrar_tranca):
+        dados_cadastrados = {"numero": 1, "localizacao": "modelo_teste", "ano_de_fabricacao": "2023", "modelo": 1, "status": 3}
+        mock_cadastrar_tranca.return_value = dados_cadastrados
+
+        response = self.client.post('/tranca', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
+
+        self.assertEqual(response.status_code, 422)
+
+    @patch('controller.main.cadastrar_tranca_route')
+    def test_cadastrar_tranca_route_200(self, mock_cadastrar_tranca):
+        dados_cadastrados = {"numero": 0, "localizacao": "modelo_teste", "ano_de_fabricacao": "2023", "modelo": "oi", "status": 1}
+        mock_cadastrar_tranca.return_value = dados_cadastrados
+
+        response = self.client.post('/tranca', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
+
+        self.assertEqual(response.status_code, 200)
 
 
 if __name__ == '__main__':
