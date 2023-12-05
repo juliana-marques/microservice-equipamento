@@ -6,7 +6,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
 from controller.main import app
-from service.BicicletaService import listar_bicicleta_id
+from service.BicicletaService import listar_bicicleta_id, cadastrar_bicicleta
 from service.TotemService import listar_totem_id
 from service.TrancaService import listar_tranca_id
 from repository.bicicleta_repository import BicletaRepository
@@ -32,7 +32,7 @@ class TestRoutes(unittest.TestCase):
 
     def test_listar_bicicleta_id_route(self):
         response = self.client.get('/bicicleta/1')
-        data = response.text
+        data = response.json
 
         bicicletas_esperadas = listar_bicicleta_id(1)
         if bicicletas_esperadas == False:
@@ -53,7 +53,7 @@ class TestRoutes(unittest.TestCase):
 
     def test_listar_totens_id_route(self):
         response = self.client.get('/totem/1')
-        data = response.text
+        data = response.json
 
         totens_esperados = listar_totem_id(1)
         if totens_esperados == False:
@@ -72,12 +72,34 @@ class TestRoutes(unittest.TestCase):
 
     def test_listar_tranca_id_route(self):
         response = self.client.get('/tranca/1')
-        data = response.text
+        data = response.json
 
         trancas_esperados = listar_tranca_id(1)
         if trancas_esperados == False:
             trancas_esperados = "Dados não encontrados"
         self.assertEqual(data, trancas_esperados)
+
+    @patch('service.BicicletaService.cadastrar_bicicleta')
+    def test_cadastrar_bicicleta_route(self, mock_cadastrar_bicicleta):
+        dados_cadastrados = {"marca": "marca_teste", "modelo": "modelo_teste", "ano": "2023", "numero": 1, "status": 3}
+        mock_cadastrar_bicicleta.return_value = dados_cadastrados
+
+        response = self.client.post('/bicicleta', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
+        dados_cadastrados = {'ano': '2023', 'id': 1, 'marca': 'marca_teste', 'modelo': 'modelo_teste', 'numero': 1, 'status': 'NOVA'}
+
+        self.assertEqual(response.status_code, 422)
+
+    @patch('service.BicicletaService.cadastrar_bicicleta')
+    def test_cadastrar_bicicleta_route(self, mock_cadastrar_bicicleta):
+        dados_cadastrados = {"marca": "marca_teste", "modelo": "modelo_teste", "ano": "2023", "numero": 0, "status": 3}
+        mock_cadastrar_bicicleta.return_value = dados_cadastrados
+
+        response = self.client.post('/bicicleta', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
+        dados_cadastrados = {'ano': '2023', 'id': 1, 'marca': 'marca_teste', 'modelo': 'modelo_teste', 'numero': 1, 'status': 'NOVA'}
+
+        self.assertEqual(response.status_code, 200)
+
+
 
 
 if __name__ == '__main__':
