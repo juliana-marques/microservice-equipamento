@@ -45,7 +45,6 @@ def cadastrar_tranca(tranca_dados):
         "numero": tranca.numero,
         "localizacao": tranca.localizacao,
         "ano_de_fabricacao": tranca.ano_de_fabricacao,
-        "numero": tranca.numero,
         "modelo": tranca.modelo,
         "status": tranca.status,
     }
@@ -72,7 +71,6 @@ def editar_tranca(id_tranca, tranca_dados_editados):
         "numero": tranca_editar.numero,
         "localizacao": tranca_editar.localizacao,
         "ano_de_fabricacao": tranca_editar.ano_de_fabricacao,
-        "numero": tranca_editar.numero,
         "modelo": tranca_editar.modelo,
         "status": tranca_editar.status,
     }
@@ -104,7 +102,6 @@ def integrar_tranca_rede(tranca):
         "numero": tranca_na_rede.numero,
         "localizacao": tranca_na_rede.localizacao,
         "ano_de_fabricacao": tranca_na_rede.ano_de_fabricacao,
-        "numero": tranca_na_rede.numero,
         "modelo": tranca_na_rede.modelo,
         "status": tranca_na_rede.status,
     }
@@ -131,7 +128,6 @@ def status_trancar(tranca):
         "numero": tranca_na_rede.numero,
         "localizacao": tranca_na_rede.localizacao,
         "ano_de_fabricacao": tranca_na_rede.ano_de_fabricacao,
-        "numero": tranca_na_rede.numero,
         "modelo": tranca_na_rede.modelo,
         "status": tranca_na_rede.status,
     }
@@ -158,7 +154,6 @@ def status_destrancar(tranca):
         "numero": tranca_na_rede.numero,
         "localizacao": tranca_na_rede.localizacao,
         "ano_de_fabricacao": tranca_na_rede.ano_de_fabricacao,
-        "numero": tranca_na_rede.numero,
         "modelo": tranca_na_rede.modelo,
         "status": tranca_na_rede.status,
     }
@@ -184,7 +179,6 @@ def integrar_bicicleta_tranca(tranca, bicicleta_numero):
         "numero": tranca_na_rede.numero,
         "localizacao": tranca_na_rede.localizacao,
         "ano_de_fabricacao": tranca_na_rede.ano_de_fabricacao,
-        "numero": tranca_na_rede.numero,
         "modelo": tranca_na_rede.modelo,
         "status": tranca_na_rede.status,
     }
@@ -212,7 +206,6 @@ def tranca_alterar_status(tranca, acao):
         "numero": tranca_editar.numero,
         "localizacao": tranca_editar.localizacao,
         "ano_de_fabricacao": tranca_editar.ano_de_fabricacao,
-        "numero": tranca_editar.numero,
         "modelo": tranca_editar.modelo,
         "status": tranca_editar.status,
     }
@@ -238,7 +231,6 @@ def retirar_bicicleta_rede(tranca):
         "numero": tranca_editar.numero,
         "localizacao": tranca_editar.localizacao,
         "ano_de_fabricacao": tranca_editar.ano_de_fabricacao,
-        "numero": tranca_editar.numero,
         "modelo": tranca_editar.modelo,
         "status": tranca_editar.status,
     }
