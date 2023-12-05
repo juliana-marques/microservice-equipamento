@@ -185,7 +185,6 @@ def bicicleta_integrar_rede_route():
             tranca = integrar_bicicleta_tranca(tranca, bicicleta["numero"])
             bicicleta = integrar_bicicleta_rede(bicicleta)
             
-        #email = email_funcionario(response["id_funcionario"])
         verificar = enviar_email(f"Bicicleta {bicicleta['numero']} integrada na rede", f"Foi integrada a bicicleta {bicicleta['numero']} pelo funcionário {response['id_funcionario']} às {data_horario}")
         if verificar == False:
             response_mock.json.return_value = erro_integracao, 404
@@ -246,7 +245,6 @@ def retirar_bicicleta_rede_route():
         status_bicicleta_route(bicicleta["id"], response["status_acao_reparador"])
 
         
-        #email = email_funcionario(response["id_funcionario"])
         enviar_email(f"Bicicleta {bicicleta['numero']} integrada na rede", f"Foi integrada a bicicleta {bicicleta['numero']} pelo funcionário {response['id_funcionario']} às {data_horario}")
 
         response_mock.json.return_value = dados_removidos, 200
@@ -290,7 +288,6 @@ def cadastrar_totem_route():
     for data in json:
         if totem.get(f"{data}") == None:
             return response_mock.json()
-        
 
     totem = cadastrar_totem(totem)
 
@@ -490,7 +487,6 @@ def integrar_tranca_rede_route():
         adicionar_tranca_totem(response["id_totem"], tranca_rede, data_horario)
         response_mock.json.return_value = dados_cadastrados, 200
 
-    #email = email_funcionario(response["id_funcionario"])
     verificar = enviar_email(f"Tranca {response['id_tranca']} integrada na rede", f"Foi integrada a tranca {response['id_tranca']} pelo funcionário {response['id_funcionario']} às {data_horario}")
     if verificar == False:
         response_mock.json.return_value = erro_integracao, 404
@@ -530,7 +526,6 @@ def retirar_tranca_rede_route():
         
         remover_tranca_totem(response["id_tranca"], response["id_totem"])
 
-        #email = email_funcionario(response["id_funcionario"])
         verificar = enviar_email(f"Tranca {response['id_tranca']} retirada da rede", f"Foi retirada a tranca {response['id_tranca']} pelo funcionário {response['id_funcionario']} às {data_horario}")
         if verificar == False:
             response_mock.json.return_value = erro_integracao, 404

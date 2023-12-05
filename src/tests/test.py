@@ -140,6 +140,26 @@ class TestRoutes(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+    @patch('controller.main.editar_tranca_route')
+    def test_cadastrar_tranca_routee_404(self, mock_editar_tranca):
+        dados_cadastrados = {"numero": 1, "localizacao": "modelo_teste", "ano_de_fabricacao": "2023", "modelo": 1, "status": 3}
+        mock_editar_tranca.return_value = dados_cadastrados
+
+        response = self.client.put('/tranca/1', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
+
+        self.assertEqual(response.status_code, 422)
+
+    @patch('controller.main.editar_tranca_route')
+    def test_cadastrar_bicicleta_routee_404(self, mock_editar_bicicleta):
+        dados_cadastrados = {"numero": 1, "localizacao": "modelo_teste", "ano_de_fabricacao": "2023", "modelo": 1, "status": 3}
+        mock_editar_bicicleta.return_value = dados_cadastrados
+
+        response = self.client.put('/bicicleta/1', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
+
+        self.assertEqual(response.status_code, 422)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
