@@ -170,7 +170,6 @@ def bicicleta_integrar_rede_route():
     for data in json:
         if response.get(f"{data}") == None:
             return response_mock.json()
-        
     verificar_funcionarios(response["id_funcionario"])
 
     bicicleta = listar_bicicleta_id(response["id_bicicleta"])
