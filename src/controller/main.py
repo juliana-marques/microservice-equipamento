@@ -30,8 +30,6 @@ data_horario = date.strftime("%d/%m/%Y %H:%M:%S")
 @app.route('/bicicleta', methods=['GET'])
 def listar_bicicletas_route():
     bicicletas = listar_bicicletas()
-    if len(bicicletas) == 0:
-        return "Não há bicicletas cadastradas", 200
     return bicicletas
 
 
@@ -258,8 +256,6 @@ def retirar_bicicleta_rede_route():
 @app.route('/totem', methods=['GET'])
 def listar_totens_route():
     totens = listar_totens()
-    if len(totens) == 0:
-        return "Não há totens cadastrados", 200
     return totens
 
 
@@ -345,8 +341,6 @@ def listar_bicicletas_totem_route(id_totem):
 @app.route('/tranca', methods=['GET'])
 def obter_trancas_route():
     trancas = listar_trancas()
-    if len(trancas) == 0:
-        return "Não há trancas cadastradas", 200
     return trancas
 
 
