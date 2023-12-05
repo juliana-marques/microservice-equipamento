@@ -1,10 +1,10 @@
-import os, sys
-from flask import Flask,  request
+import os, sys, requests
+from flask import Flask, request
 from unittest.mock import Mock
 from datetime import datetime
 
 app = Flask(__name__)
-requests = Mock()
+requests_mock = Mock()
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))                    
 sys.path.insert(0, project_root)                                                                 
@@ -22,6 +22,7 @@ dados_atualizados = "Dados atualizados"
 dados_removidos = "Dados removidos"
 dados_nao_encontrados = "Dados não encontrados"
 dados_invalidos = "Dados inválidos"
+erro_integracao = "Erro de integração"
 
 date = datetime.now()
 data_horario = date.strftime("%d/%m/%Y %H:%M:%S")
@@ -171,6 +172,8 @@ def bicicleta_integrar_rede_route():
     for data in json:
         if response.get(f"{data}") == None:
             return response_mock.json()
+        
+    verificar_funcionarios(response["id_funcionario"])
 
     bicicleta = listar_bicicleta_id(response["id_bicicleta"])
     if bicicleta == False:
@@ -184,9 +187,12 @@ def bicicleta_integrar_rede_route():
             tranca = integrar_bicicleta_tranca(tranca, bicicleta["numero"])
             bicicleta = integrar_bicicleta_rede(bicicleta)
             
-            # validar funcionario e enviar email
+        email = email_funcionario(response["id_funcionario"])
+        verificar = enviar_email(email, f"Bicicleta {bicicleta['numero']} integrada na rede", f"Foi integrada a bicicleta {bicicleta['numero']} pelo funcionário {response['id_funcionario']} às {data_horario}")
+        if verificar == False:
+            response_mock.json.return_value = erro_integracao, 404
 
-    response_mock.json.return_value = dados_cadastrados, 200
+        response_mock.json.return_value = dados_cadastrados, 200
     return response_mock.json()
 
 
@@ -220,6 +226,8 @@ def retirar_bicicleta_rede_route():
         if response.get(f"{data}") == None:
             return response_mock.json()
         
+    verificar_funcionarios(response["id_funcionario"])
+        
     if response["status_acao_reparador"] == 4 or response["status_acao_reparador"] == 6:
 
         bicicleta = listar_bicicleta_id(response["id_bicicleta"])
@@ -239,7 +247,10 @@ def retirar_bicicleta_rede_route():
         retirar_bicicleta_rede(tranca)
         status_bicicleta_route(bicicleta["id"], response["status_acao_reparador"])
 
-        # envia uma mensagem para o reparador
+        email = email_funcionario(response["id_funcionario"])
+        verificar = enviar_email(email, f"Bicicleta {bicicleta['numero']} integrada na rede", f"Foi integrada a bicicleta {bicicleta['numero']} pelo funcionário {response['id_funcionario']} às {data_horario}")
+        if verificar == False:
+            response_mock.json.return_value = erro_integracao, 404
 
         response_mock.json.return_value = dados_removidos, 200
     return response_mock.json()
@@ -469,6 +480,9 @@ def integrar_tranca_rede_route():
     for data in json:
         if response.get(f"{data}") == None:
             return response_mock.json()
+        
+
+    verificar_funcionarios(response["id_funcionario"])
     
     tranca = listar_tranca_id(response["id_tranca"])
     if tranca == False:
@@ -483,7 +497,10 @@ def integrar_tranca_rede_route():
         adicionar_tranca_totem(response["id_totem"], tranca_rede, data_horario)
         response_mock.json.return_value = dados_cadastrados, 200
 
-    # ENVIA MENSAGEM PARA O REPARADOR 
+    email = email_funcionario(response["id_funcionario"])
+    verificar = enviar_email(email, f"Tranca {response['id_tranca']} integrada na rede", f"Foi integrada a tranca {response['id_tranca']} pelo funcionário {response['id_funcionario']} às {data_horario}")
+    if verificar == False:
+        response_mock.json.return_value = erro_integracao, 404
 
     return response_mock.json()
 
@@ -499,6 +516,8 @@ def retirar_tranca_rede_route():
     for data in json:
         if response.get(f"{data}") == None:
             return response_mock.json()
+        
+    verificar_funcionarios(response["id_funcionario"])
         
     if response["status_acao_reparador"] == int(4) or response["status_acao_reparador"] == int(7):
         totem = listar_totem_id(response["id_totem"])
@@ -518,7 +537,10 @@ def retirar_tranca_rede_route():
         
         remover_tranca_totem(response["id_tranca"], response["id_totem"])
 
-        # envia uma mensagem para o reparador
+        email = email_funcionario(response["id_funcionario"])
+        verificar = enviar_email(email, f"Tranca {response['id_tranca']} retirada da rede", f"Foi retirada a tranca {response['id_tranca']} pelo funcionário {response['id_funcionario']} às {data_horario}")
+        if verificar == False:
+            response_mock.json.return_value = erro_integracao, 404
 
         response_mock.json.return_value = dados_removidos, 200
     return response_mock.json()
@@ -584,6 +606,49 @@ def status_tranca_route(tranca_id, acao):
     response_mock.json.return_value = dados_cadastrados, 200
     return response_mock.json()
 
+
+def verificar_funcionarios(id_funcionario):
+    response_mock = Mock()
+    response_mock.json.return_value = erro_integracao, 404
+
+    func = False
+    url_funcionario = "https://microservice-aluguel-hm535ksnoq-uc.a.run.app/funcionario"
+    response_funcionario = requests.get(url_funcionario)
+    
+    if response_funcionario.status_code == 200:
+
+        response_funcionario = response_funcionario.json()
+        for funcionario in response_funcionario["funcionarios"]:
+            if id_funcionario == funcionario["id_funcionario"]:
+                return True
+
+    return response_mock.json()
+
+def email_funcionario(id_funcionario):
+
+    url_funcionario = "https://microservice-aluguel-hm535ksnoq-uc.a.run.app/funcionario"
+    response_funcionario = requests.get(url_funcionario).json()
+
+    email = None
+    for funcionario in response_funcionario["funcionarios"]:
+        if id_funcionario == funcionario["id_funcionario"]: 
+            email = funcionario["email"]
+    return email
+
+def enviar_email(email, assunto, mensagem):
+    url = "https://microservice-externo-b4i7jmshsa-uc.a.run.app/enviarEmail"
+
+    data = {
+        "destinatario": "bqueiroz@edu.unirio.br",
+        "assunto": assunto,
+        "mensagem": mensagem
+    }
+    response = requests.post(url, json=data)
+    print(response.text)
+    if response.status_code != 200:
+        return False
+    
+    return True
 
 if __name__ == '__main__':
     app.run(port=int(os.environ.get("PORT", 8080)),host='0.0.0.0',debug=True)
