@@ -187,8 +187,8 @@ def bicicleta_integrar_rede_route():
             tranca = integrar_bicicleta_tranca(tranca, bicicleta["numero"])
             bicicleta = integrar_bicicleta_rede(bicicleta)
             
-        email = email_funcionario(response["id_funcionario"])
-        verificar = enviar_email(email, f"Bicicleta {bicicleta['numero']} integrada na rede", f"Foi integrada a bicicleta {bicicleta['numero']} pelo funcionário {response['id_funcionario']} às {data_horario}")
+        #email = email_funcionario(response["id_funcionario"])
+        verificar = enviar_email(f"Bicicleta {bicicleta['numero']} integrada na rede", f"Foi integrada a bicicleta {bicicleta['numero']} pelo funcionário {response['id_funcionario']} às {data_horario}")
         if verificar == False:
             response_mock.json.return_value = erro_integracao, 404
 
@@ -247,10 +247,9 @@ def retirar_bicicleta_rede_route():
         retirar_bicicleta_rede(tranca)
         status_bicicleta_route(bicicleta["id"], response["status_acao_reparador"])
 
-        email = email_funcionario(response["id_funcionario"])
-        verificar = enviar_email(email, f"Bicicleta {bicicleta['numero']} integrada na rede", f"Foi integrada a bicicleta {bicicleta['numero']} pelo funcionário {response['id_funcionario']} às {data_horario}")
-        if verificar == False:
-            response_mock.json.return_value = erro_integracao, 404
+        
+        #email = email_funcionario(response["id_funcionario"])
+        enviar_email(f"Bicicleta {bicicleta['numero']} integrada na rede", f"Foi integrada a bicicleta {bicicleta['numero']} pelo funcionário {response['id_funcionario']} às {data_horario}")
 
         response_mock.json.return_value = dados_removidos, 200
     return response_mock.json()
@@ -497,8 +496,8 @@ def integrar_tranca_rede_route():
         adicionar_tranca_totem(response["id_totem"], tranca_rede, data_horario)
         response_mock.json.return_value = dados_cadastrados, 200
 
-    email = email_funcionario(response["id_funcionario"])
-    verificar = enviar_email(email, f"Tranca {response['id_tranca']} integrada na rede", f"Foi integrada a tranca {response['id_tranca']} pelo funcionário {response['id_funcionario']} às {data_horario}")
+    #email = email_funcionario(response["id_funcionario"])
+    verificar = enviar_email(f"Tranca {response['id_tranca']} integrada na rede", f"Foi integrada a tranca {response['id_tranca']} pelo funcionário {response['id_funcionario']} às {data_horario}")
     if verificar == False:
         response_mock.json.return_value = erro_integracao, 404
 
@@ -537,8 +536,8 @@ def retirar_tranca_rede_route():
         
         remover_tranca_totem(response["id_tranca"], response["id_totem"])
 
-        email = email_funcionario(response["id_funcionario"])
-        verificar = enviar_email(email, f"Tranca {response['id_tranca']} retirada da rede", f"Foi retirada a tranca {response['id_tranca']} pelo funcionário {response['id_funcionario']} às {data_horario}")
+        #email = email_funcionario(response["id_funcionario"])
+        verificar = enviar_email(f"Tranca {response['id_tranca']} retirada da rede", f"Foi retirada a tranca {response['id_tranca']} pelo funcionário {response['id_funcionario']} às {data_horario}")
         if verificar == False:
             response_mock.json.return_value = erro_integracao, 404
 
@@ -611,7 +610,6 @@ def verificar_funcionarios(id_funcionario):
     response_mock = Mock()
     response_mock.json.return_value = erro_integracao, 404
 
-    func = False
     url_funcionario = "https://microservice-aluguel-hm535ksnoq-uc.a.run.app/funcionario"
     response_funcionario = requests.get(url_funcionario)
     
@@ -635,7 +633,7 @@ def email_funcionario(id_funcionario):
             email = funcionario["email"]
     return email
 
-def enviar_email(email, assunto, mensagem):
+def enviar_email(assunto, mensagem):
     url = "https://microservice-externo-b4i7jmshsa-uc.a.run.app/enviarEmail"
 
     data = {

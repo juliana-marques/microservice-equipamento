@@ -71,5 +71,7 @@ class TestRoutes(unittest.TestCase):
 
         trancas_esperados = listar_tranca_id(1)
         self.assertEqual(data, trancas_esperados)
-        
-  
+
+
+if __name__ == '__main__':
+    unittest.main()
