@@ -23,7 +23,6 @@ dados_removidos = "Dados removidos"
 dados_nao_encontrados = "Dados não encontrados"
 dados_invalidos = "Dados inválidos"
 erro_integracao = "Erro de integração"
-
 date = datetime.now()
 data_horario = date.strftime("%d/%m/%Y %H:%M:%S")
 
