@@ -6,9 +6,9 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
 from controller.main import app
-from service.BicicletaService import listar_bicicleta_id, enum_status
+from service.BicicletaService import listar_bicicleta_id
 from service.TotemService import listar_totem_id
-from service.TrancaService import listar_tranca_id, fechamento_da_tranca
+from service.TrancaService import listar_tranca_id
 from repository.bicicleta_repository import BicletaRepository
 from repository.totem_repository import TotemRepository
 from repository.tranca_repository import TrancaRepository
