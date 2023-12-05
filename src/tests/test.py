@@ -32,13 +32,13 @@ class TestRoutes(unittest.TestCase):
 
     def test_listar_bicicleta_id_route(self):
         response = self.client.get('/bicicleta/1')
-        data = response.json
 
+        code = 200
         bicicletas_esperadas = listar_bicicleta_id(1)
         if bicicletas_esperadas == False:
-            bicicletas_esperadas = "Dados não encontrados"
+            code = 404
 
-        self.assertEqual(data, bicicletas_esperadas)
+        self.assertEqual(response.status_code, code)
 
 
     def test_listar_totens_route(self):
@@ -51,14 +51,16 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(data, totens_esperados)
 
 
-    def test_listar_totens_id_route(self):
+    def test_listar_totens_id_route_404(self):
         response = self.client.get('/totem/1')
-        data = response.json
+
+        code = 200
 
         totens_esperados = listar_totem_id(1)
         if totens_esperados == False:
-            totens_esperados = "Dados não encontrados"
-        self.assertEqual(data, totens_esperados)
+            code = 404
+
+        self.assertEqual(response.status_code, code)
 
     def test_listar_trancas_route(self):
         response = self.client.get('/tranca')
@@ -72,15 +74,15 @@ class TestRoutes(unittest.TestCase):
 
     def test_listar_tranca_id_route(self):
         response = self.client.get('/tranca/1')
-        data = response.json
 
+        code = 200
         trancas_esperados = listar_tranca_id(1)
         if trancas_esperados == False:
-            trancas_esperados = "Dados não encontrados"
-        self.assertEqual(data, trancas_esperados)
+            code = 404
+        self.assertEqual(response.status_code, code)
 
-    @patch('service.BicicletaService.cadastrar_bicicleta')
-    def test_cadastrar_bicicleta_route(self, mock_cadastrar_bicicleta):
+    @patch('controller.main.cadastrar_bicicleta_route')
+    def test_cadastrar_bicicleta_route_200(self, mock_cadastrar_bicicleta):
         dados_cadastrados = {"marca": "marca_teste", "modelo": "modelo_teste", "ano": "2023", "numero": 1, "status": 3}
         mock_cadastrar_bicicleta.return_value = dados_cadastrados
 
@@ -89,8 +91,8 @@ class TestRoutes(unittest.TestCase):
 
         self.assertEqual(response.status_code, 422)
 
-    @patch('service.BicicletaService.cadastrar_bicicleta')
-    def test_cadastrar_bicicleta_route(self, mock_cadastrar_bicicleta):
+    @patch('controller.main.cadastrar_bicicleta_route')
+    def test_cadastrar_bicicleta_route_422(self, mock_cadastrar_bicicleta):
         dados_cadastrados = {"marca": "marca_teste", "modelo": "modelo_teste", "ano": "2023", "numero": 0, "status": 3}
         mock_cadastrar_bicicleta.return_value = dados_cadastrados
 
