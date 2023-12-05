@@ -257,7 +257,6 @@ def retirar_tranca_rede(tranca, acao):
         "numero": tranca_editar.numero,
         "localizacao": tranca_editar.localizacao,
         "ano_de_fabricacao": tranca_editar.ano_de_fabricacao,
-        "numero": tranca_editar.numero,
         "modelo": tranca_editar.modelo,
         "status": tranca_editar.status,
     }

@@ -437,7 +437,7 @@ def editar_tranca_route(id_tranca):
         return response_mock.json()
     
     tranca["numero"] = result["numero"]
-    result = editar_tranca(id_tranca, tranca)
+    editar_tranca(id_tranca, tranca)
 
     response_mock.status_code = dados_atualizados, 200
     response_mock.json.return_value =  editar_tranca(id_tranca, tranca), 200
