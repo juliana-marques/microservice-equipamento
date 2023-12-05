@@ -5,8 +5,8 @@ from flask_testing import TestCase
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)
 
-from controller.main import app
-from service.BicicletaService import listar_bicicleta_id, cadastrar_bicicleta
+from controller.main import app, enviar_email, verificar_funcionarios
+from service.BicicletaService import listar_bicicleta_id
 from service.TotemService import listar_totem_id
 from service.TrancaService import listar_tranca_id
 from repository.bicicleta_repository import BicletaRepository
@@ -151,12 +151,45 @@ class TestRoutes(unittest.TestCase):
 
     @patch('controller.main.editar_tranca_route')
     def test_cadastrar_bicicleta_routee_404(self, mock_editar_bicicleta):
-        dados_cadastrados = {"numero": 1, "localizacao": "modelo_teste", "ano_de_fabricacao": "2023", "modelo": 1, "status": 3}
+        dados_cadastrados = {"numero": 0, "localizacao": "modelo_teste", "ano_de_fabricacao": "2023", "modelo": 1, "status": 3}
         mock_editar_bicicleta.return_value = dados_cadastrados
 
         response = self.client.put('/bicicleta/1', headers={"Content-Type": "application/json"}, json=dados_cadastrados)
 
         self.assertEqual(response.status_code, 422)
+
+
+    @patch('controller.main.enviar_email')
+    def test_enviar_email_integration(self, mock_post):
+        mock_post.return_value.status_code = 200
+        mock_post.return_value.json.return_value = {"status": "success"}
+
+        resultado = enviar_email("Teste", "Isso é um teste")
+
+        self.assertTrue(resultado)
+
+    @patch('controller.main.verificar_funcionarios')
+    def test_verificar_funcionarios_integration(self, mock_get):
+        funcionarios_mock = {"funcionarios":[{"confirmacaoSenha":"123","cpf":"99999999999","email":"employee@example.com","funcao":"Reparador","id_funcionario":1,"idade":25,"matricula":"12345","nome":"Beltrano","senha":"123"}]}
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = funcionarios_mock
+
+        resultado = verificar_funcionarios(1)
+
+        self.assertTrue(resultado)
+
+    
+    @patch('controller.main.verificar_funcionarios')
+    def test_verificar_funcionarios_integration(self, mock_get):
+        funcionarios_mock = {"funcionarios":[{"confirmacaoSenha":"123","cpf":"99999999999","email":"employee@example.com","funcao":"Reparador","id_funcionario":1,"idade":25,"matricula":"12345","nome":"Beltrano","senha":"123"}]}
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = funcionarios_mock
+
+        resultado = verificar_funcionarios(3)
+        print(resultado)
+
+        self.assertEqual(resultado[0], "Erro de integração")
+        self.assertEqual(resultado[1], 404)    
 
 
 
