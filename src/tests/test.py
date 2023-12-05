@@ -35,6 +35,9 @@ class TestRoutes(unittest.TestCase):
         data = response.text
 
         bicicletas_esperadas = listar_bicicleta_id(1)
+        if bicicletas_esperadas == False:
+            bicicletas_esperadas = "Dados não encontrados"
+
         self.assertEqual(data, bicicletas_esperadas)
 
 
@@ -53,6 +56,8 @@ class TestRoutes(unittest.TestCase):
         data = response.text
 
         totens_esperados = listar_totem_id(1)
+        if totens_esperados == False:
+            totens_esperados = "Dados não encontrados"
         self.assertEqual(data, totens_esperados)
 
     def test_listar_trancas_route(self):
@@ -70,6 +75,8 @@ class TestRoutes(unittest.TestCase):
         data = response.text
 
         trancas_esperados = listar_tranca_id(1)
+        if trancas_esperados == False:
+            trancas_esperados = "Dados não encontrados"
         self.assertEqual(data, trancas_esperados)
 
 
