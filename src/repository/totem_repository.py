@@ -55,5 +55,30 @@ class TotemRepository:
             if totem["id_totem"] == id_totem:
                 self.totens_tranca[i]["trancas"].append(tranca)
         
-        print(self.totens_tranca)
         return tranca
+    
+    def remover_tranca_totem(self, id_tranca, id_totem):
+        for i, totem in enumerate(self.totens_tranca):
+            if totem["id_totem"] == id_totem:
+                trancas = totem["trancas"]
+
+        for i, tranca in enumerate(trancas):
+            if tranca["id"] == id_tranca:
+                self.totens_tranca[i]["trancas"].remove(tranca)
+
+
+    def integrar_bicicleta_tranca(self, tranca_adicionada):
+        for i, totem in enumerate(self.totens_tranca):
+            for j, tranca in enumerate(totem["trancas"]):
+                if tranca["id"] == tranca_adicionada["id"]:
+                    self.totens_tranca[i]["trancas"].remove(self.totens_tranca[i]["trancas"][j])
+                    self.totens_tranca[i]["trancas"].append(tranca_adicionada)
+
+
+    def retirar_bicicleta_tranca(self, tranca_removida):
+        for i, totem in enumerate(self.totens_tranca):
+            for j, tranca in enumerate(totem["trancas"]):
+                if tranca["id"] == tranca_removida["id"]:
+                    self.totens_tranca[i]["trancas"].remove(self.totens_tranca[i]["trancas"][j])
+                    self.totens_tranca[i]["trancas"].append(tranca_removida)
+                    

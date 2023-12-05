@@ -50,3 +50,30 @@ def listar_totem_id(totem_id):
 def adicionar_tranca_totem(id_totem, tranca, data):
     tranca = repository().adicionar_tranca_totem(id_totem, tranca, data)
     return tranca
+
+def remover_tranca_totem(id_tranca, id_totem):
+    repository().remover_tranca_totem(id_tranca, id_totem)
+
+def listar_trancas_totem(id_totem):
+    totens_tranca = repository().totens_tranca
+
+    for totem in totens_tranca:
+        if totem["id_totem"] == id_totem:
+            return totem["trancas"]
+    return []
+        
+def listar_bicicletas_totem(id_totem):
+    totens_tranca = repository().totens_tranca
+    bicicletas = []
+
+    if len(totens_tranca) > 0:
+        for totem in totens_tranca:
+            if totem["id_totem"] == id_totem:
+                trancas = totem["trancas"]
+
+        if len(trancas) > 0:
+            for tranca in trancas:
+                if tranca["bicicleta"] != 0:
+                    bicicletas.append(tranca["bicicleta"])
+
+    return bicicletas

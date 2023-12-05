@@ -5,6 +5,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, project_root)  
 
 from repository.tranca_repository import TrancaRepository as repository
+from repository.totem_repository import TotemRepository
 from model.tranca import Tranca
 
 id_tranca_global = 0
@@ -166,65 +167,109 @@ def status_destrancar(tranca):
 
     return tranca_incluida
 
-def retirar_tranca_rede(data):
-    trancas = repository().listar_trancas()
+def integrar_bicicleta_tranca(tranca, bicicleta_numero):
+    tranca_na_rede = Tranca(
+        id = tranca["id"],
+        bicicleta = bicicleta_numero,
+        numero = tranca["numero"],
+        localizacao = tranca["localizacao"],
+        ano_de_fabricacao = tranca["ano_de_fabricacao"],
+        modelo = tranca["modelo"],
+        status = 3,
+    )
 
-    if data['status_acao_reparador'] == "REPARO":
-        for tranca in trancas:
-            if data['numero'] == tranca['numero'] and tranca['status'] != "DESTRANCAR":
-                tranca['status'] = "EM_REPARO"
-                tranca = editar_tranca(tranca['id'], tranca)
-                # envia email / registra data  e hota, numero e o reparador
-                return True
-            
-    elif data['status_acao_reparador'] == "APOSENTADORIA":
-        for tranca in trancas:
-            if data['numero'] == tranca['numero']:
-                tranca['status'] = "APOSENTADA"
-                tranca = editar_tranca(tranca['id'], tranca)
-                # envia email / registra data  e hota, numero e o reparador
-                return True
-    return False
+    tranca_incluida = {
+        "id": tranca_na_rede.id,
+        "bicicleta": tranca_na_rede.bicicleta,
+        "numero": tranca_na_rede.numero,
+        "localizacao": tranca_na_rede.localizacao,
+        "ano_de_fabricacao": tranca_na_rede.ano_de_fabricacao,
+        "numero": tranca_na_rede.numero,
+        "modelo": tranca_na_rede.modelo,
+        "status": tranca_na_rede.status,
+    }
 
-def validar_tranca_integrar_bicicleta(data):
-    trancas = repository().listar_trancas()
-    for tranca in trancas:
-        if data == tranca['id'] and tranca['status'] == "DISPONIVEL":
-            return True
-    return False
+    repository().editar_tranca(tranca_incluida)
+    TotemRepository().integrar_bicicleta_tranca(tranca_incluida)
 
-def fechamento_da_tranca(data):
-    trancas = repository().listar_trancas()
-    for tranca in trancas:
-        if data == tranca['numero']:
-            tranca['status'] = "EM_USO"
-            tranca = editar_tranca(tranca['id'], tranca)
-            return True
-    return False
+    return tranca_incluida
 
-def validar_tranca_retirar_bicicleta(data):
-    trancas = repository().listar_trancas()
-    for tranca in trancas:
-        if data['numero_tranca'] == tranca['numero']:
-            tranca['status'] = "DESTRANCAR"
-            tranca = editar_tranca(tranca['id'], tranca)
-            return True
-    return False
+def tranca_alterar_status(tranca, acao):
 
-def trancar(id_tranca):
-    trancas = repository().listar_trancas()
-    for tranca in trancas:
-        if id_tranca == tranca['id']:
-            tranca['status'] = "TRANCAR"
-            tranca = editar_tranca(tranca['id'], tranca)
-            return True
-        return False
+    tranca_editar = Tranca(
+        id = tranca["id"],
+        bicicleta = tranca["bicicleta"],
+        numero = tranca["numero"],
+        localizacao = tranca["localizacao"],
+        ano_de_fabricacao = tranca["ano_de_fabricacao"],
+        modelo = tranca["modelo"],
+        status = acao,
+    )
 
-def destrancar(id_tranca):
-    trancas = repository().listar_trancas()
-    for tranca in trancas:
-        if id_tranca == tranca['id']:
-            tranca['status'] = "DESTRANCAR"
-            tranca = editar_tranca(tranca['id'], tranca)
-            return True
-        return False
+    tranca_editada = {
+        "id": tranca_editar.id,
+        "bicicleta": tranca_editar.bicicleta,
+        "numero": tranca_editar.numero,
+        "localizacao": tranca_editar.localizacao,
+        "ano_de_fabricacao": tranca_editar.ano_de_fabricacao,
+        "numero": tranca_editar.numero,
+        "modelo": tranca_editar.modelo,
+        "status": tranca_editar.status,
+    }
+
+    repository().editar_tranca(tranca_editada)
+
+    return tranca_editada
+
+def retirar_bicicleta_rede(tranca):
+    tranca_editar = Tranca(
+        id = tranca["id"],
+        bicicleta = 0,
+        numero = tranca["numero"],
+        localizacao = tranca["localizacao"],
+        ano_de_fabricacao = tranca["ano_de_fabricacao"],
+        modelo = tranca["modelo"],
+        status = 2,
+    )
+
+    tranca_editada = {
+        "id": tranca_editar.id,
+        "bicicleta": tranca_editar.bicicleta,
+        "numero": tranca_editar.numero,
+        "localizacao": tranca_editar.localizacao,
+        "ano_de_fabricacao": tranca_editar.ano_de_fabricacao,
+        "numero": tranca_editar.numero,
+        "modelo": tranca_editar.modelo,
+        "status": tranca_editar.status,
+    }
+    
+    repository().editar_tranca(tranca_editada)
+    TotemRepository().retirar_bicicleta_tranca(tranca_editada)
+
+    return tranca_editada
+
+def retirar_tranca_rede(tranca, acao):
+    tranca_editar = Tranca(
+        id = tranca["id"],
+        bicicleta = 0,
+        numero = tranca["numero"],
+        localizacao = tranca["localizacao"],
+        ano_de_fabricacao = tranca["ano_de_fabricacao"],
+        modelo = tranca["modelo"],
+        status = acao,
+    )
+
+    tranca_editada = {
+        "id": tranca_editar.id,
+        "bicicleta": tranca_editar.bicicleta,
+        "numero": tranca_editar.numero,
+        "localizacao": tranca_editar.localizacao,
+        "ano_de_fabricacao": tranca_editar.ano_de_fabricacao,
+        "numero": tranca_editar.numero,
+        "modelo": tranca_editar.modelo,
+        "status": tranca_editar.status,
+    }
+    
+    repository().editar_tranca(tranca_editada)
+
+    return tranca_editada

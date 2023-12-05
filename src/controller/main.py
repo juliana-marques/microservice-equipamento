@@ -9,9 +9,9 @@ requests = Mock()
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))                    
 sys.path.insert(0, project_root)                                                                 
 
-from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta, listar_bicicleta_id, integrar_bicicleta_rede, retirar_bicicleta_rede, status_bicicleta
-from service.TotemService import listar_totens, cadastrar_totem, deletar_totem, listar_totem_id, adicionar_tranca_totem
-from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id, integrar_tranca_rede, retirar_tranca_rede, validar_tranca_integrar_bicicleta, fechamento_da_tranca, validar_tranca_retirar_bicicleta, status_trancar, status_destrancar
+from service.BicicletaService import listar_bicicletas, cadastrar_bicicleta, editar_bicicleta, deletar_bicicleta, listar_bicicleta_id, integrar_bicicleta_rede, retirar_bicicleta_rede, bicicleta_alterar_status
+from service.TotemService import listar_totens, cadastrar_totem, deletar_totem, listar_totem_id, adicionar_tranca_totem, remover_tranca_totem, listar_trancas_totem, listar_bicicletas_totem
+from service.TrancaService import listar_trancas, cadastrar_tranca, editar_tranca, deletar_tranca, listar_tranca_id, integrar_tranca_rede, status_trancar, status_destrancar, integrar_bicicleta_tranca, tranca_alterar_status, retirar_bicicleta_rede, retirar_tranca_rede
 from model.bicicleta import Bicicleta
 from model.tranca import Tranca
 from model.totem import Totem
@@ -158,8 +158,12 @@ def deletar_bicicleta_route(bicicleta_id):
     if result == False:
         return response_mock.json()
     
-    status = Bicicleta().status_bicicleta(result.get("status"))
-    if status != "APOSENTADA": ## AND NENHUMA TRANCA
+    trancas = listar_trancas()
+    for tranca in trancas:
+        if tranca["bicicleta"] == result["numero"]:
+            return response_mock.json()
+
+    if result.get("status") != "APOSENTADA":
         response_mock.json.return_value = "Status inválido", 422
         return response_mock.json()
 
@@ -171,50 +175,89 @@ def deletar_bicicleta_route(bicicleta_id):
     return response_mock.json()
 
 
-################################################################################
 @app.route('/bicicleta/integrarNaRede', methods=['POST'])
 def bicicleta_integrar_rede_route():
-    data = request.json
+    response = request.json
     response_mock = Mock()
+    response_mock.json.return_value = dados_invalidos, 422
 
-    validacao_tranca = validar_tranca_integrar_bicicleta(data['tranca_id'])
-    validacao_bicicleta = integrar_bicicleta_rede(data['bicicleta_numero'])
+    json = ["id_bicicleta", "id_tranca", "id_funcionario"]
+    for data in json:
+        if response.get(f"{data}") == None:
+            return response_mock.json()
 
-    if not validacao_tranca or not validacao_bicicleta:
-        response_mock.json.return_value = dados_invalidos, 422
+    bicicleta = listar_bicicleta_id(response["id_bicicleta"])
+    if bicicleta == False:
         return response_mock.json()
 
-    fechamento_da_tranca(data['tranca_id']) # enviar email
+    if bicicleta["status"] == "NOVA" or bicicleta["status"] == "EM_REPARO":
+        tranca = listar_tranca_id(response["id_tranca"])
+        if tranca == False:
+            return response_mock.json()
+        if tranca["status"] == "DISPONIVEL":
+            tranca = integrar_bicicleta_tranca(tranca, bicicleta["numero"])
+            bicicleta = integrar_bicicleta_rede(bicicleta)
+            
+            # validar funcionario e enviar email
 
     response_mock.json.return_value = dados_cadastrados, 200
     return response_mock.json()
 
 
 @app.route('/bicicleta/<int:bicicleta_id>/status/<int:acao>', methods=['POST'])
-def status_bicicleta_route(bicicleta_id, acao): 
-    validar_bicicleta = status_bicicleta(bicicleta_id, acao)
+def status_bicicleta_route(bicicleta_id, acao):
 
     response_mock = Mock()
-    if validar_bicicleta:
-        response_mock.json.return_value = dados_cadastrados, 200
-        return response_mock.json()
     response_mock.json.return_value = dados_invalidos, 422
+
+    bicicleta = listar_bicicleta_id(bicicleta_id)
+    if bicicleta == False:
+        return response_mock.json()
+    
+    bicicleta = bicicleta_alterar_status(bicicleta, acao)
+    if bicicleta["status"] == None:
+        return response_mock.json()
+    
+    response_mock.json.return_value = dados_cadastrados, 200
     return response_mock.json()
 
 
 @app.route('/bicicleta/retirarDaRede', methods=['POST'])
 def retirar_bicicleta_rede_route():
-    data = request.json
-    validar_bicicleta = retirar_bicicleta_rede(data)
-    validar_tranca = validar_tranca_retirar_bicicleta(data)
+    response = request.json
 
     response_mock = Mock()
-    if validar_bicicleta and validar_tranca:
-        response_mock.json.return_value = dados_cadastrados, 200
-        return response_mock.json()
     response_mock.json.return_value = dados_invalidos, 422
+
+    json = ["id_tranca", "id_bicicleta", "id_funcionario", "status_acao_reparador"]
+    for data in json:
+        if response.get(f"{data}") == None:
+            return response_mock.json()
+        
+    if response["status_acao_reparador"] == 4 or response["status_acao_reparador"] == 6:
+
+        bicicleta = listar_bicicleta_id(response["id_bicicleta"])
+        if bicicleta == False:
+            return response_mock.json()
+        
+        if bicicleta["status"] == "DISPONIVEL" or bicicleta["status"] == "LIVRE":
+            return response_mock.json()
+    
+        tranca = listar_tranca_id(response["id_tranca"])
+        if tranca == False:
+            return response_mock.json()
+
+        if tranca["bicicleta"] != bicicleta["numero"]:
+            return response_mock.json()
+    
+        retirar_bicicleta_rede(tranca)
+        status_bicicleta_route(bicicleta["id"], response["status_acao_reparador"])
+
+        # envia uma mensagem para o reparador
+
+        response_mock.json.return_value = dados_removidos, 200
     return response_mock.json()
-################################################################################
+
 
 @app.route('/totem', methods=['GET'])
 def listar_totens_route():
@@ -285,7 +328,23 @@ def deletar_totem_route(id_totem):
 
     return response_mock.json()
 
-######## listar bicicletas e trancas NOS TOTENS
+@app.route('/totem/<int:id_totem>/trancas', methods=['GET'])
+def listar_trancas_totem_route(id_totem):
+    trancas = listar_trancas_totem(id_totem)
+    return trancas
+
+@app.route('/totem/<int:id_totem>/bicicletas', methods=['GET'])
+def listar_bicicletas_totem_route(id_totem):
+    bicicletas = listar_bicicletas_totem(id_totem)
+    bicicletas_data = []
+
+    bicicletas_cadastradas = listar_bicicletas()
+    for bicicleta in bicicletas_cadastradas:
+        for i in bicicletas:
+            if bicicleta["numero"] == i:
+                bicicletas_data.append(bicicleta)
+
+    return bicicletas_data
 
 @app.route('/tranca', methods=['GET'])
 def obter_trancas_route():
@@ -402,7 +461,9 @@ def deletar_tranca_route(id_tranca):
     if result == False:
         return response_mock.json()
     
-    ## TRANCAS SEM BICICLETA
+    tranca = listar_tranca_id(id_tranca)
+    if tranca["bicicleta"] != 0:
+        return response_mock.json()
 
     is_delete = deletar_tranca(id_tranca)
     if is_delete == True:
@@ -431,7 +492,6 @@ def integrar_tranca_rede_route():
     if totem == False:
         return response_mock.json()
     
-    print(tranca["status"])
     if tranca["status"] == "NOVA" or tranca["status"] == "EM_REPARO":
         tranca_rede = integrar_tranca_rede(tranca)
         adicionar_tranca_totem(response["id_totem"], tranca_rede, data_horario)
@@ -444,14 +504,37 @@ def integrar_tranca_rede_route():
 
 @app.route('/tranca/retirarDaRede', methods=['POST'])
 def retirar_tranca_rede_route():
-    data = request.json
-    validar_tranca = retirar_tranca_rede(data)
+    response = request.json
 
     response_mock = Mock()
-    if validar_tranca:
-        response_mock.json.return_value = dados_cadastrados, 200
-        return response_mock.json()
     response_mock.json.return_value = dados_invalidos, 422
+
+    json = ["id_totem", "id_tranca", "id_funcionario", "status_acao_reparador"]
+    for data in json:
+        if response.get(f"{data}") == None:
+            return response_mock.json()
+        
+    if response["status_acao_reparador"] == int(4) or response["status_acao_reparador"] == int(7):
+        totem = listar_totem_id(response["id_totem"])
+        if totem == False:
+            return response_mock.json()
+    
+        tranca = listar_tranca_id(response["id_tranca"])
+        if tranca == False:
+            return response_mock.json()
+
+        if tranca["bicicleta"] != 0:
+            return response_mock.json()
+    
+        tranca = retirar_tranca_rede(tranca, response["status_acao_reparador"])
+        if tranca["status"] == None:
+            return response_mock.json()
+        
+        remover_tranca_totem(response["id_tranca"], response["id_totem"])
+
+        # envia uma mensagem para o reparador
+
+        response_mock.json.return_value = dados_removidos, 200
     return response_mock.json()
 
 
@@ -495,6 +578,23 @@ def destrancar_route(id_tranca):
             tranca["bicicleta"] = data["bicicleta"]
 
     status_destrancar(tranca)
+    response_mock.json.return_value = dados_cadastrados, 200
+    return response_mock.json()
+
+@app.route('/tranca/<int:tranca_id>/status/<int:acao>', methods=['POST'])
+def status_tranca_route(tranca_id, acao):
+
+    response_mock = Mock()
+    response_mock.json.return_value = dados_invalidos, 422
+
+    tranca = listar_tranca_id(tranca_id)
+    if tranca == False:
+        return response_mock.json()
+    
+    tranca = tranca_alterar_status(tranca, acao)
+    if tranca["status"] == None:
+        return response_mock.json()
+    
     response_mock.json.return_value = dados_cadastrados, 200
     return response_mock.json()
 

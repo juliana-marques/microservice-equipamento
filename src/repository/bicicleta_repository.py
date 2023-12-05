@@ -25,5 +25,5 @@ class BicletaRepository:
 
         for bicicleta in bicicletas:
             if bicicleta["id"] == bicicleta_editada["id"]:
-                self.trancas.remove(bicicleta)
-                self.trancas.append(bicicleta_editada)
+                self.bicicletas.remove(bicicleta)
+                self.bicicletas.append(bicicleta_editada)

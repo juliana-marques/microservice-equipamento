@@ -88,13 +88,56 @@ def deletar_bicicleta(bicicleta_id):
 
 
 def integrar_bicicleta_rede(data):
-    bicicletas = BicletaRepository().listar_bicicleta()
-    for b in bicicletas:
-        if b['numero'] == data and (b['status'] == "NOVA" or b['status'] == "EM_REPARO"):
-            b['status'] = "DISPONIVEL"
-            editar_bicicleta(b['id'], b)
-            return True
-    return False
+
+    bicicleta = listar_bicicleta_id(data["id"])
+    if bicicleta["numero"] != data["numero"]:
+        return False
+    
+    bicicleta_editar = Bicicleta(
+        id = data["id"],
+        marca = data["marca"],
+        modelo = data["modelo"],
+        ano = data["ano"],
+        numero = data["numero"],
+        status = 1,
+    )
+
+    bicicleta_editada = {
+        "id": bicicleta_editar.id,
+        "marca": bicicleta_editar.marca,
+        "modelo": bicicleta_editar.modelo,
+        "ano": bicicleta_editar.ano,
+        "numero": bicicleta_editar.numero,
+        "status": bicicleta_editar.status
+    }
+    
+    BicletaRepository().editar_bicicleta(bicicleta_editada)
+
+    return bicicleta_editada
+
+def bicicleta_alterar_status(bicicleta, acao):
+
+    bicicleta_editar = Bicicleta(
+        id = bicicleta["id"],
+        marca = bicicleta["marca"],
+        modelo = bicicleta["modelo"],
+        ano = bicicleta["ano"],
+        numero = bicicleta["numero"],
+        status = acao,
+    )
+
+    bicicleta_editada = {
+        "id": bicicleta_editar.id,
+        "marca": bicicleta_editar.marca,
+        "modelo": bicicleta_editar.modelo,
+        "ano": bicicleta_editar.ano,
+        "numero": bicicleta_editar.numero,
+        "status": bicicleta_editar.status
+    }
+    
+    BicletaRepository().editar_bicicleta(bicicleta_editada)
+
+    return bicicleta_editada
 
 def retirar_bicicleta_rede(data):
     bicicletas = BicletaRepository().listar_bicicleta()

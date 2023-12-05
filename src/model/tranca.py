@@ -20,5 +20,9 @@ class Tranca:
             return "EM_REPARO"
         elif status == 5:
             return "DISPONIVEL"
+        elif status == 6:
+            return "LIVRE"
+        elif status == 7:
+            return "APOSENTADA"
         else:
             return None
