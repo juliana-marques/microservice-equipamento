@@ -24,5 +24,7 @@ class Tranca:
             return "LIVRE"
         elif status == 7:
             return "APOSENTADA"
+        elif status == 8:
+            return "REPARO_SOLICITADO"
         else:
             return None
